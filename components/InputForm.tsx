@@ -27,11 +27,15 @@ function Field({
   children,
   hint,
   cms,
+  error,
+  warning,
 }: {
   label: string;
   children: React.ReactNode;
   hint?: string;
   cms?: boolean;
+  error?: string;
+  warning?: string;
 }) {
   return (
     <div className={`flex flex-col gap-1 rounded-lg transition-colors ${cms ? "bg-[#E8F5F5] px-2 py-1.5 -mx-2" : ""}`}>
@@ -41,6 +45,8 @@ function Field({
       </label>
       {children}
       {hint && <span className="text-xs text-gray-400">{hint}</span>}
+      {error && <span className="text-xs text-red-600">{error}</span>}
+      {!error && warning && <span className="text-xs text-amber-600">{warning}</span>}
     </div>
   );
 }
@@ -243,6 +249,46 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
     }
   }
 
+  // ─── Validation ─────────────────────────────────────────────────────────────
+
+  const wacError =
+    values.wac <= 0 ? "WAC must be greater than zero" : undefined;
+
+  const rebateError =
+    values.commercialRebatePercentage > 100 ? "Rebate cannot exceed 100%" : undefined;
+
+  const commercialVolumeError =
+    values.commercialVolume < 0 ? "Volume cannot be negative" : undefined;
+  const medicaidVolumeError =
+    values.medicaidVolume < 0 ? "Volume cannot be negative" : undefined;
+  const volume340BError =
+    values.volume340B < 0 ? "Volume cannot be negative" : undefined;
+
+  const totalVolumeError =
+    !commercialVolumeError && !medicaidVolumeError && !volume340BError &&
+    values.commercialVolume === 0 && values.medicaidVolume === 0 && values.volume340B === 0
+      ? "At least one channel must have volume greater than zero"
+      : undefined;
+
+  const ampWarning =
+    values.ampPercentage > 100
+      ? "AMP above 100% means AMP exceeds WAC. Verify this is intentional."
+      : undefined;
+
+  const bestPriceWarning =
+    values.wac > 0 && values.currentBestPrice > values.wac
+      ? "Best Price exceeds WAC. Verify this is intentional."
+      : undefined;
+
+  const hasBlockingErrors = !!(
+    wacError ||
+    rebateError ||
+    commercialVolumeError ||
+    medicaidVolumeError ||
+    volume340BError ||
+    totalVolumeError
+  );
+
   // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
@@ -418,7 +464,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
       <div className="rounded-xl bg-white/60 border border-gray-100 p-4 flex flex-col gap-4">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">Pricing</p>
 
-        <Field label="WAC per Unit" hint="Wholesale Acquisition Cost" cms={cmsFields.has("wac")}>
+        <Field label="WAC per Unit" hint="Wholesale Acquisition Cost" cms={cmsFields.has("wac")} error={wacError}>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
             <input
@@ -440,6 +486,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
               : "Average Manufacturer Price"
           }
           cms={cmsFields.has("ampPercentage")}
+          warning={ampWarning}
         >
           <div className="relative">
             <input
@@ -456,7 +503,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
           </div>
         </Field>
 
-        <Field label="Current Best Price per Unit">
+        <Field label="Current Best Price per Unit" warning={bestPriceWarning}>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
             <input
@@ -475,7 +522,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
       <div className="rounded-xl bg-white/60 border border-gray-100 p-4 flex flex-col gap-3">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">Commercial Deal</p>
 
-        <Field label="Commercial Rebate Percentage">
+        <Field label="Commercial Rebate Percentage" error={rebateError}>
           <div className="flex items-center gap-3">
             <input
               type="range"
@@ -507,7 +554,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
       <div className="rounded-xl bg-white/60 border border-gray-100 p-4 flex flex-col gap-4">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">Volume (units)</p>
 
-        <Field label="Commercial Volume">
+        <Field label="Commercial Volume" error={commercialVolumeError}>
           <input
             type="number"
             min={0}
@@ -522,6 +569,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
           label="Medicaid Volume"
           hint={cmsFields.has("medicaidVolume") ? "Estimated from Medicare Part D annual claims ÷ 4" : undefined}
           cms={cmsFields.has("medicaidVolume")}
+          error={medicaidVolumeError}
         >
           <input
             type="number"
@@ -533,7 +581,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
           />
         </Field>
 
-        <Field label="340B Volume">
+        <Field label="340B Volume" error={volume340BError ?? totalVolumeError}>
           <input
             type="number"
             min={0}
@@ -547,7 +595,8 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
 
       <button
         onClick={onCalculate}
-        className="w-full rounded-xl bg-[#0A4747] py-3 text-sm font-semibold text-white shadow-md hover:bg-[#0A4747]/90 active:scale-[0.98] transition-all"
+        disabled={hasBlockingErrors}
+        className="w-full rounded-xl bg-[#0A4747] py-3 text-sm font-semibold text-white shadow-md hover:bg-[#0A4747]/90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Calculate Cascade
       </button>

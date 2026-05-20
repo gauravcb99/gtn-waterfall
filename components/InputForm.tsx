@@ -114,6 +114,8 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
   const [pendingResult, setPendingResult] = useState<CMSDrugData | null>(null);
   // Tracks which form fields were auto-populated from CMS
   const [cmsFields, setCmsFields] = useState<Set<keyof InputValues>>(new Set());
+  // Tracks whether Best Price was auto-set from a CMS load
+  const [bestPriceAutoSet, setBestPriceAutoSet] = useState(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -136,8 +138,9 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
 
       return changed ? next : prev;
     });
-    // When values change externally (scenario load), clear CMS highlights
+    // When values change externally (scenario load), clear CMS highlights and auto-set note
     setCmsFields(new Set());
+    setBestPriceAutoSet(false);
   }, [values]);
 
   function set(key: keyof InputValues, raw: string) {
@@ -148,6 +151,8 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
       next.delete(key);
       return next;
     });
+
+    if (key === "currentBestPrice") setBestPriceAutoSet(false);
 
     if (key === "drugName") {
       setDrafts((prev) => ({ ...prev, drugName: raw }));
@@ -217,10 +222,15 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
     populated.add("wac");
     populated.add("ampPercentage");
 
+    const defaultBestPrice = parseFloat((drug.wacPerUnit * 0.85).toFixed(4));
+    newDrugs.currentBestPrice = String(defaultBestPrice);
+    populated.add("currentBestPrice");
+
     const newValues: Partial<InputValues> = {
       drugName: drug.drugName,
       wac: drug.wacPerUnit,
       ampPercentage: 95,
+      currentBestPrice: defaultBestPrice,
     };
 
     if (drug.medicarePartDVolume !== undefined) {
@@ -232,6 +242,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
     setDrafts((prev) => ({ ...prev, ...newDrugs }));
     onChange({ ...values, ...newValues });
     setCmsFields(populated);
+    setBestPriceAutoSet(true);
     setPendingResult(null);
     setSearchResults([]);
   }
@@ -503,7 +514,11 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
           </div>
         </Field>
 
-        <Field label="Current Best Price per Unit" warning={bestPriceWarning}>
+        <Field
+          label="Current Best Price per Unit"
+          hint={bestPriceAutoSet ? "Auto-set to 85% of WAC. Update with your actual contracted Best Price." : undefined}
+          warning={bestPriceWarning}
+        >
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
             <input

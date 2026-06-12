@@ -14,6 +14,7 @@ import InflationPenaltyModule from "@/components/InflationPenaltyModule";
 import ChannelMixOptimizer from "@/components/ChannelMixOptimizer";
 import ExportButton from "@/components/ExportButton";
 import MultiYearForecast from "@/components/MultiYearForecast";
+import Module13_340BImpact from "@/components/Module13_340BImpact";
 
 const DEFAULT_INPUTS: InputValues = {
   drugName: "Sample Drug",
@@ -27,7 +28,7 @@ const DEFAULT_INPUTS: InputValues = {
 };
 
 type Tab = "single" | "portfolio";
-type SingleSubTab = "analysis" | "forecast";
+type SingleSubTab = "analysis" | "forecast" | "impact340b";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("single");
@@ -146,6 +147,16 @@ export default function Home() {
               >
                 Multi-Year Forecast
               </button>
+              <button
+                onClick={() => setSingleSubTab("impact340b")}
+                className={`px-4 py-2 text-xs font-semibold transition-all border-b-2 -mb-px ${
+                  singleSubTab === "impact340b"
+                    ? "border-[#C9A86A] text-[#0A4747] bg-white"
+                    : "border-transparent text-gray-400 hover:text-[#0A4747] hover:border-gray-200 bg-transparent"
+                }`}
+              >
+                340B Impact
+              </button>
             </div>
             {/* Drug name context */}
             <p className="text-xs text-gray-500 pb-2">
@@ -162,6 +173,9 @@ export default function Home() {
         {activeTab === "single" && singleSubTab === "forecast" ? (
           /* ── Multi-Year Forecast sub-tab ──────────────────────────── */
           <MultiYearForecast inputs={inputs} />
+        ) : activeTab === "single" && singleSubTab === "impact340b" ? (
+          /* ── 340B Impact sub-tab ──────────────────────────────────── */
+          <Module13_340BImpact inputs={inputs} results={results} />
         ) : activeTab === "single" ? (
           <>
             {/*

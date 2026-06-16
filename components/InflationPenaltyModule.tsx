@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { AuditIcon } from "./AuditIcon";
 import { ChevronDown, ChevronRight, TrendingUp } from "lucide-react";
 import {
   BarChart,
@@ -387,9 +388,18 @@ export default function InflationPenaltyModule({ inputs }: InflationPenaltyModul
                 <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                   Penalty Per Unit
                 </p>
-                <p className="text-xl font-bold text-[#C9A86A]">
+                <div className="text-xl font-bold text-[#C9A86A] flex items-center gap-1">
                   {usd2.format(penaltyResults.penaltyPerUnit)}
-                </p>
+                  <AuditIcon
+                    formula="Penalty = max(0, AMP − Inflation-Adjusted AMP Benchmark) where benchmark = AMP at base period × cumulative CPI-U"
+                    inputs={[
+                      { name: "Current WAC", value: usd2.format(inputs.wac) },
+                      { name: "Inflation-Adjusted WAC", value: usd2.format(penaltyResults.inflationAdjustedWac) },
+                      { name: "Penalty per Unit", value: usd2.format(penaltyResults.penaltyPerUnit) },
+                    ]}
+                    citation="SSA §1847A(i) — Part B inflation rebates; SSA §1860D-14B — Part D inflation rebates"
+                  />
+                </div>
                 <p className="text-xs text-gray-400">WAC above inflation-adjusted price</p>
               </div>
 
@@ -397,9 +407,19 @@ export default function InflationPenaltyModule({ inputs }: InflationPenaltyModul
                 <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                   Total Annual Penalty
                 </p>
-                <p className="text-2xl font-bold text-[#C9A86A]">
+                <div className="text-2xl font-bold text-[#C9A86A] flex items-center gap-1">
                   {usd.format(penaltyResults.totalAnnualPenalty)}
-                </p>
+                  <AuditIcon
+                    formula="Annual Penalty Total = Penalty per Unit × Annual Unit Volume"
+                    inputs={[
+                      { name: "Penalty per Unit", value: usd2.format(penaltyResults.penaltyPerUnit) },
+                      { name: "Medicaid Volume", value: penaltyInputs.medicaidVolume.toLocaleString() },
+                      { name: "Medicare Part D Volume", value: penaltyInputs.medicarePartDVolume.toLocaleString() },
+                      { name: "Total Annual Penalty", value: usd.format(penaltyResults.totalAnnualPenalty) },
+                    ]}
+                    citation="Derived from SSA §1847A(i) — Part B inflation rebates; SSA §1860D-14B — Part D inflation rebates"
+                  />
+                </div>
                 <p className="text-xs text-gray-400">Medicaid + Medicare combined</p>
               </div>
             </div>

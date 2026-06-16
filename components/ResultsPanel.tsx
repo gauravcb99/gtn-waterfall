@@ -1,7 +1,9 @@
 "use client";
 
+import { ReactNode } from "react";
 import { CalculationResults, InputValues } from "@/lib/calculations";
 import { TrendingUp, AlertTriangle, CheckCircle } from "lucide-react";
+import { AuditIcon } from "./AuditIcon";
 
 const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -25,12 +27,14 @@ function MetricCard({
   highlight,
   large,
   showArrow,
+  auditIcon,
 }: {
   label: string;
   value: string;
   highlight?: boolean;
   large?: boolean;
   showArrow?: boolean;
+  auditIcon?: ReactNode;
 }) {
   return (
     <div
@@ -60,6 +64,7 @@ function MetricCard({
             className={`w-5 h-5 ${highlight ? "text-[#C9A86A]" : "text-[#C9A86A]"}`}
           />
         )}
+        {auditIcon}
       </div>
     </div>
   );
@@ -85,10 +90,12 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
     gtnSpreadPercentage,
     medicaidNetPrice,
     price340B,
+    amp,
   } = results;
 
-  const { commercialVolume, medicaidVolume, volume340B, currentBestPrice } = inputs;
+  const { commercialVolume, medicaidVolume, volume340B, currentBestPrice, wac } = inputs;
   const rebateIncreased = newMedicaidRebatePerUnit > oldMedicaidRebatePerUnit;
+  const commercialRebatePct = wac > 0 ? (1 - commercialNetPrice / wac) * 100 : 0;
 
   return (
     <div className="flex flex-col gap-5">
@@ -97,9 +104,17 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
         <div className="flex items-start gap-3 rounded-xl bg-[#C9A86A]/15 border border-[#C9A86A] p-4">
           <AlertTriangle className="w-5 h-5 text-[#C9A86A] shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-semibold text-[#0A4747]">
+            <div className="text-sm font-semibold text-[#0A4747] flex items-center gap-1.5">
               BEST PRICE CASCADE TRIGGERED
-            </p>
+              <AuditIcon
+                formula="Cascade triggers IF Commercial Net Price < Current Best Price"
+                inputs={[
+                  { name: "Commercial Net Price", value: usd2.format(commercialNetPrice) },
+                  { name: "Current Best Price", value: usd2.format(currentBestPrice) },
+                ]}
+                citation="42 USC 1396r-8(c)(1)(C) — Best Price statutory definition"
+              />
+            </div>
             <p className="text-sm text-ink mt-0.5">
               Your commercial rebate decision has reset the statutory Medicaid Best
               Price. Incremental exposure:{" "}
@@ -127,21 +142,63 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
         <MetricCard
           label="Commercial Net Price"
           value={usd2.format(commercialNetPrice)}
+          auditIcon={
+            <AuditIcon
+              formula="Commercial Net Price = WAC × (1 − Commercial Rebate %)"
+              inputs={[
+                { name: "WAC", value: usd2.format(wac) },
+                { name: "Commercial Rebate %", value: `${commercialRebatePct.toFixed(1)}%` },
+              ]}
+              citation="42 CFR 447.505(c) — commercial pricing methodology"
+            />
+          }
         />
         <MetricCard
           label="Old Medicaid Rebate / Unit"
           value={usd2.format(oldMedicaidRebatePerUnit)}
+          auditIcon={
+            <AuditIcon
+              formula="Old URA = max(AMP × 23.1%, AMP − Current Best Price)"
+              inputs={[
+                { name: "AMP", value: usd2.format(amp) },
+                { name: "Current Best Price", value: usd2.format(currentBestPrice) },
+              ]}
+              citation="42 CFR 447.505 — Unit Rebate Amount calculation"
+            />
+          }
         />
         <MetricCard
           label="New Medicaid Rebate / Unit"
           value={usd2.format(newMedicaidRebatePerUnit)}
           showArrow={rebateIncreased}
+          auditIcon={
+            <AuditIcon
+              formula="New URA = max(AMP × 23.1%, AMP − New Best Price); New Best Price = Commercial Net Price"
+              inputs={[
+                { name: "AMP", value: usd2.format(amp) },
+                { name: "New Best Price (Commercial Net)", value: usd2.format(commercialNetPrice) },
+              ]}
+              citation="42 CFR 447.505 — Unit Rebate Amount calculation, post-cascade"
+            />
+          }
         />
         <MetricCard
           label="Incremental Medicaid Exposure"
           value={usd.format(incrementalMedicaidExposure)}
           highlight
           large
+          auditIcon={
+            <AuditIcon
+              formula="(New URA − Old URA) × Medicaid Volume"
+              inputs={[
+                { name: "New URA", value: usd2.format(newMedicaidRebatePerUnit) },
+                { name: "Old URA", value: usd2.format(oldMedicaidRebatePerUnit) },
+                { name: "Medicaid Volume", value: num.format(medicaidVolume) },
+              ]}
+              citation="Derived from 42 CFR 447.505"
+              inverted
+            />
+          }
         />
       </div>
 

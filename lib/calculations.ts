@@ -689,15 +689,11 @@ export function calculate340BImpact(
   const ceiling340B = cascadeResults.price340B;
   const totalVolume = cascadeResults.totalVolume;
 
-  // Elasticity-adjusted base share (year-0, before secular growth)
-  // Spread = max(0, (commercialNet − ceiling) / WAC)
-  const spreadRatio = Math.max(
-    0,
-    (cascadeResults.commercialNetPrice - ceiling340B) / moduleInputs.wac
-  );
-  const elasticityDrivenShare =
-    m13Inputs.baseline340BShare + m13Inputs.elasticityCoefficient * spreadRatio;
-  const baseShare = Math.min(0.4, elasticityDrivenShare);
+  // Elasticity contribution: a constant level shift based on WAC-to-ceiling spread.
+  // Does NOT compound over years — secular growth compounds separately on the baseline share.
+  const elasticityContribution =
+    m13Inputs.elasticityCoefficient *
+    Math.max(0, (moduleInputs.wac - ceiling340B) / moduleInputs.wac);
 
   // Per-unit revenue loss: full WAC-to-ceiling discount depth
   const perUnitLoss = Math.max(0, moduleInputs.wac - ceiling340B);
@@ -709,8 +705,11 @@ export function calculate340BImpact(
   let totalCannibalization = 0;
 
   for (let y = 0; y <= forecastYears; y++) {
-    const growthFactor = Math.pow(1 + m13Inputs.contractPharmacyGrowthRate, y);
-    const projectedShare = Math.min(0.4, baseShare * growthFactor);
+    // Secular growth compounds on baseline share; elasticity adds as a flat level shift
+    const secularShare =
+      m13Inputs.baseline340BShare *
+      Math.pow(1 + m13Inputs.contractPharmacyGrowthRate, y);
+    const projectedShare = Math.min(0.4, secularShare + elasticityContribution);
     const shareShift = projectedShare - m13Inputs.baseline340BShare;
     const incrementalVolume = Math.max(0, shareShift * totalVolume);
     const yearCannibalization = incrementalVolume * perUnitLoss;
@@ -736,7 +735,7 @@ export function calculate340BImpact(
 
   return {
     ceiling340B,
-    currentShare: baseShare,
+    currentShare: yearByYear[0].projectedShare,
     projectedShare: finalYear.projectedShare,
     shareShift: finalYear.projectedShare - m13Inputs.baseline340BShare,
     perUnitLoss,

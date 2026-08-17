@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
+import { AuditIcon } from "./AuditIcon";
 import { ChevronDown, ChevronRight, Pill } from "lucide-react";
 import {
   BarChart,
@@ -57,11 +58,13 @@ function MetricCard({
   value,
   highlight = false,
   sub,
+  auditIcon,
 }: {
   label: string;
   value: string;
   highlight?: boolean;
   sub?: string;
+  auditIcon?: ReactNode;
 }) {
   return (
     <div
@@ -74,13 +77,14 @@ function MetricCard({
       <p className="text-xs font-semibold uppercase tracking-wide text-[#0A4747]">
         {label}
       </p>
-      <p
-        className={`text-lg font-bold ${
+      <div
+        className={`text-lg font-bold flex items-center gap-1 ${
           highlight ? "text-[#C9A86A]" : "text-[#1A1A1A]"
         }`}
       >
         {value}
-      </p>
+        {auditIcon}
+      </div>
       {sub && <p className="text-xs text-gray-400">{sub}</p>}
     </div>
   );
@@ -363,6 +367,18 @@ export default function IRAImpactScenario({
               label="IRA Price Ceiling"
               value={usd2.format(iraResults.iraPriceCeiling)}
               sub={`${ceilingLabel} of Non-Federal AMP`}
+              auditIcon={
+                <AuditIcon
+                  formula={`MFP Ceiling = WAC × (1 − applicable ceiling %) where ceiling % depends on years on market`}
+                  inputs={[
+                    { name: "WAC", value: usd2.format(inputs.wac) },
+                    { name: "Applicable Ceiling", value: ceilingLabel },
+                    { name: "Years on Market", value: String(parsedInputs.yearsOnMarket) },
+                    { name: "Non-Federal AMP", value: usd2.format(parsedInputs.nonFederalAMP) },
+                  ]}
+                  citation="IRA Section 11001; SSA §1192(c)(3) — Maximum Fair Price ceiling"
+                />
+              }
             />
             <MetricCard
               label="Current Medicare Net Price"

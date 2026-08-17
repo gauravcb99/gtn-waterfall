@@ -632,6 +632,118 @@ export function calculateMultiYearForecast(
   return { years };
 }
 
+// ─── Module 13: 340B Entity-Level Modeling ──────────────────────────────────
+
+export interface Module13Inputs {
+  /** Fraction of total volume flowing through 340B at baseline; default 0.12 */
+  baseline340BShare: number;
+  /** Linear elasticity — how fast covered entities shift to 340B as ceiling drops; default 0.15 */
+  elasticityCoefficient: number;
+  /** Annual % growth in 340B contract pharmacy footprint (as a decimal, e.g. 0.08); default 0.08 */
+  contractPharmacyGrowthRate: number;
+}
+
+export interface Module13YearData {
+  year: number;
+  ceiling340B: number;
+  projectedShare: number;
+  shareShift: number;
+  incrementalVolume: number;
+  perUnitLoss: number;
+  yearCannibalization: number;
+  base340BRevenueLoss: number;
+}
+
+export interface Module13Output {
+  ceiling340B: number;
+  currentShare: number;
+  projectedShare: number;
+  shareShift: number;
+  perUnitLoss: number;
+  totalCannibalization: number;
+  yearByYear: Module13YearData[];
+}
+
+/**
+ * Pure function — no side effects, no localStorage.
+ *
+ * Computes the 340B ceiling price (per 42 USC §256b(a)(1)) from the
+ * cascade results already implied by moduleInputs, then models how
+ * covered-entity volume share grows via (a) commercial-vs-340B spread
+ * elasticity and (b) secular contract-pharmacy footprint growth.
+ *
+ * Per-unit revenue loss is defined as WAC minus the 340B ceiling price —
+ * i.e., the full discount depth captured by covered entities per unit
+ * routed through the 340B contract-pharmacy channel.
+ */
+export function calculate340BImpact(
+  moduleInputs: InputValues,
+  m13Inputs: Module13Inputs,
+  forecastYears: number = 3
+): Module13Output {
+  // Run the cascade for base-year pricing
+  const cascadeResults = calculate(moduleInputs);
+
+  // 340B ceiling = AMP − URA, which equals price340B in cascade output
+  // (per 42 CFR 447.505: URA = max(AMP×0.231, AMP−BestPrice))
+  const ceiling340B = cascadeResults.price340B;
+  const totalVolume = cascadeResults.totalVolume;
+
+  // Elasticity contribution: a constant level shift based on WAC-to-ceiling spread.
+  // Does NOT compound over years — secular growth compounds separately on the baseline share.
+  const elasticityContribution =
+    m13Inputs.elasticityCoefficient *
+    Math.max(0, (moduleInputs.wac - ceiling340B) / moduleInputs.wac);
+
+  // Per-unit revenue loss: full WAC-to-ceiling discount depth
+  const perUnitLoss = Math.max(0, moduleInputs.wac - ceiling340B);
+
+  // Baseline absolute volume used to isolate incremental shift
+  const baselineAbsoluteVolume = m13Inputs.baseline340BShare * totalVolume;
+
+  const yearByYear: Module13YearData[] = [];
+  let totalCannibalization = 0;
+
+  for (let y = 0; y <= forecastYears; y++) {
+    // Secular growth compounds on baseline share; elasticity adds as a flat level shift
+    const secularShare =
+      m13Inputs.baseline340BShare *
+      Math.pow(1 + m13Inputs.contractPharmacyGrowthRate, y);
+    const projectedShare = Math.min(0.4, secularShare + elasticityContribution);
+    const shareShift = projectedShare - m13Inputs.baseline340BShare;
+    const incrementalVolume = Math.max(0, shareShift * totalVolume);
+    const yearCannibalization = incrementalVolume * perUnitLoss;
+    const base340BRevenueLoss = baselineAbsoluteVolume * perUnitLoss;
+
+    if (y > 0) {
+      totalCannibalization += yearCannibalization;
+    }
+
+    yearByYear.push({
+      year: y,
+      ceiling340B,
+      projectedShare,
+      shareShift,
+      incrementalVolume,
+      perUnitLoss,
+      yearCannibalization,
+      base340BRevenueLoss,
+    });
+  }
+
+  const finalYear = yearByYear[forecastYears];
+
+  return {
+    ceiling340B,
+    currentShare: yearByYear[0].projectedShare,
+    projectedShare: finalYear.projectedShare,
+    shareShift: finalYear.projectedShare - m13Inputs.baseline340BShare,
+    perUnitLoss,
+    totalCannibalization,
+    yearByYear,
+  };
+}
+
 // ─── optimizeChannelMix (must live after calculate) ──────────────────────────
 
 export function optimizeChannelMix(

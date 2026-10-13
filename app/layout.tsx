@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import SelectNumberOnFocus from "@/components/SelectNumberOnFocus";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
       <body className="font-poppins bg-cream text-ink antialiased">
+        <SelectNumberOnFocus />
         {children}
       </body>
     </html>

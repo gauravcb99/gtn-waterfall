@@ -396,6 +396,10 @@ export interface ChannelMixOptimizerResults {
   maxGtn: number;
   primaryDriver: string;
   isCurrentOptimal: boolean;
+  channelNetPrices: { commercial: number; medicaid: number; b340: number };
+  optimalTieCount: number;   // candidates with the same GTN as the optimal mix
+  worstTieCount: number;     // candidates with the same GTN as the worst mix
+  commercialLeadsBelowRebatePct: number; // highest commercial rebate at which commercial still nets the most per unit
 }
 
 // ─── Main Calculation ────────────────────────────────────────────────────────
@@ -829,19 +833,22 @@ export function optimizeChannelMix(
   const cur340 = totalVolume - curCV - curMV;
   const current = evalMix(curCV, curMV, cur340);
 
-  // Step 4: Heatmap — fixed 10% commercial / 5% medicaid grid, no min constraints
-  const heatmapCommercialPcts = [40, 50, 60, 70, 80, 90];
-  const heatmapMedicaidPcts = [5, 10, 15, 20, 25, 30, 35, 40];
+  // Step 4: Heatmap — the same grid the optimizer searches (5% steps, same channel minimums,
+  // Medicaid capped at 50%), so the best and worst cells match the Optimal and Worst Case cards
+  const heatmapCommercialPcts: number[] = [];
+  for (let cp = commMin; cp <= 90; cp += 5) heatmapCommercialPcts.push(cp);
+  const heatmapMedicaidPcts: number[] = [];
+  for (let mp = medicMin; mp <= 50; mp += 5) heatmapMedicaidPcts.push(mp);
 
   const heatmap: ChannelMixHeatmapCell[][] = heatmapCommercialPcts.map((cp) =>
     heatmapMedicaidPcts.map((mp) => {
       const bp = 100 - cp - mp;
-      if (bp < 0) {
-        return { commercialPct: cp, medicaidPct: mp, b340Pct: 0, gtnSpread: null };
+      if (bp < b340Min || bp < 0) {
+        return { commercialPct: cp, medicaidPct: mp, b340Pct: bp, gtnSpread: null };
       }
       const cv = Math.round(totalVolume * cp / 100);
       const mv = Math.round(totalVolume * mp / 100);
-      const bv = Math.max(0, totalVolume - cv - mv);
+      const bv = totalVolume - cv - mv;
       const r = calculate({ ...baseInputs, commercialVolume: cv, medicaidVolume: mv, volume340B: bv });
       return { commercialPct: cp, medicaidPct: mp, b340Pct: bp, gtnSpread: r.gtnSpreadPercentage };
     })
@@ -852,12 +859,45 @@ export function optimizeChannelMix(
   const minGtn = Math.min(...allGtns);
   const maxGtn = Math.max(...allGtns);
 
-  // Step 6: Primary driver of GTN spread difference
-  let primaryDriver = "Medicaid rebate magnitude";
-  if (worst.bestPriceTriggered && !optimal.bestPriceTriggered) {
-    primaryDriver = "Best Price cascade";
-  } else if (worst.b340Pct - optimal.b340Pct > worst.medicaidPct - optimal.medicaidPct) {
-    primaryDriver = "340B discount depth";
+  // Step 6: Primary driver of GTN spread difference.
+  // Per-unit net prices don't depend on volume, so GTN is a weighted average of three fixed
+  // prices: the optimizer loads the highest-net channel and the worst case loads the lowest.
+  const priceCheck = calculate(baseInputs);
+  const channelNetPrices = {
+    commercial: priceCheck.commercialNetPrice,
+    medicaid: priceCheck.medicaidNetPrice,
+    b340: priceCheck.price340B,
+  };
+  const PRICE_TOL = 0.005;
+  const priced = [
+    { name: "commercial", price: channelNetPrices.commercial },
+    { name: "Medicaid", price: channelNetPrices.medicaid },
+    { name: "340B", price: channelNetPrices.b340 },
+  ];
+  const highPrice = Math.max(...priced.map((c) => c.price));
+  const lowPrice = Math.min(...priced.map((c) => c.price));
+  const joinNames = (names: string[]) =>
+    names.length === 1 ? names[0] : names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+  const highNames = joinNames(priced.filter((c) => highPrice - c.price < PRICE_TOL).map((c) => c.name));
+  const lowNames = joinNames(priced.filter((c) => c.price - lowPrice < PRICE_TOL).map((c) => c.name));
+  const primaryDriver =
+    highPrice - lowPrice < PRICE_TOL
+      ? "nothing: all three channels net the same per unit"
+      : `the net price gap between ${highNames} ($${highPrice.toFixed(2)}/unit) and ${lowNames} ($${lowPrice.toFixed(2)}/unit)`;
+
+  // Ties: different mixes with the same GTN (happens when two channels net the same per unit)
+  const GTN_TOL = 0.005; // percentage points, matches the 2-decimal display
+  const optimalTieCount = candidates.filter((c) => Math.abs(c.gtnSpread - optimal.gtnSpread) < GTN_TOL).length;
+  const worstTieCount = candidates.filter((c) => Math.abs(c.gtnSpread - worst.gtnSpread) < GTN_TOL).length;
+
+  // Highest commercial rebate (0.1% steps) at which commercial still nets the most per unit
+  let commercialLeadsBelowRebatePct = 0;
+  for (let i = 0; i <= 1000; i++) {
+    const rebate = i / 10;
+    const p = calculate({ ...baseInputs, commercialRebatePercentage: rebate });
+    if (p.commercialNetPrice >= Math.max(p.medicaidNetPrice, p.price340B)) {
+      commercialLeadsBelowRebatePct = rebate;
+    }
   }
 
   // Step 7: Is current mix already near-optimal?
@@ -874,5 +914,9 @@ export function optimizeChannelMix(
     maxGtn,
     primaryDriver,
     isCurrentOptimal,
+    channelNetPrices,
+    optimalTieCount,
+    worstTieCount,
+    commercialLeadsBelowRebatePct,
   };
 }

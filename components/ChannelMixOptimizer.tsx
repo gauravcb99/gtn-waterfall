@@ -206,11 +206,42 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
     const gtns = results.heatmap
       .flatMap((row) => row.map((cell) => cell.gtnSpread))
       .filter((g): g is number => g !== null);
+    if (gtns.length === 0) {
+      return { heatmapMinGtn: results.optimal.gtnSpread, heatmapMaxGtn: results.optimal.gtnSpread };
+    }
     return {
       heatmapMinGtn: Math.min(...gtns),
       heatmapMaxGtn: Math.max(...gtns),
     };
-  }, [results.heatmap]);
+  }, [results.heatmap, results.optimal.gtnSpread]);
+
+  // ── Tie note: several mixes can share the same GTN when two channels net the same per unit ──
+  const tieNote = (() => {
+    if (results.optimalTieCount <= 1 && results.worstTieCount <= 1) return null;
+    const p = results.channelNetPrices;
+    const ch = [
+      { name: "Commercial", price: p.commercial },
+      { name: "Medicaid", price: p.medicaid },
+      { name: "340B", price: p.b340 },
+    ];
+    let pair = "";
+    for (let i = 0; i < ch.length; i++) {
+      for (let j = i + 1; j < ch.length; j++) {
+        if (!pair && Math.abs(ch[i].price - ch[j].price) < 0.005) {
+          pair =
+            `${ch[i].name} and ${ch[j].name} both net $${ch[i].price.toFixed(2)} per unit at this rebate, ` +
+            `so shifting volume between them doesn't change GTN. `;
+        }
+      }
+    }
+    const which =
+      results.optimalTieCount > 1 && results.worstTieCount > 1
+        ? "The optimal and worst-case mixes shown are each one of several mixes"
+        : results.optimalTieCount > 1
+        ? "The optimal mix shown is one of several mixes"
+        : "The worst-case mix shown is one of several mixes";
+    return `${pair}${which} with the same GTN.`;
+  })();
 
   // ── Savings numbers ───────────────────────────────────────────────────────
   const savingsVsCurrent = results.optimal.totalNetRevenue - results.current.totalNetRevenue;
@@ -363,6 +394,9 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
                   </div>
                 ))}
               </div>
+              <p className="text-xs text-gray-400 mt-2">
+                The optimizer tests every mix in 5% steps and caps Medicaid at 50% of volume.
+              </p>
             </div>
           </div>
 
@@ -396,6 +430,9 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
                 gtnBg="rgba(201,168,106,0.12)"
               />
             </div>
+            {tieNote && (
+              <p className="text-xs text-gray-500 mt-3">{tieNote}</p>
+            )}
           </div>
 
           {/* ════════════════════════════════════════════════
@@ -446,7 +483,8 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
               GTN Spread Heatmap — Commercial % vs Medicaid % (340B fills remainder)
             </p>
             <p className="text-xs text-gray-400 mb-3">
-              Green = lowest GTN erosion · Gold = highest GTN erosion · Gray = invalid (340B% &lt; 0)
+              Green = lowest GTN erosion · Gold = highest GTN erosion · Gray = outside the channel minimums.
+              Same grid the optimizer searches, so the greenest cell is the Optimal Mix.
             </p>
 
             <div className="rounded-xl border border-gray-100 overflow-hidden">
@@ -498,7 +536,7 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
                               }}
                               title={
                                 isInvalid
-                                  ? `${cell.commercialPct}% Comm + ${cell.medicaidPct}% Medicaid > 100%`
+                                  ? `${cell.commercialPct}% Comm / ${cell.medicaidPct}% Medicaid leaves ${cell.b340Pct}% for 340B: outside the channel minimums`
                                   : `${cell.commercialPct}% Comm / ${cell.medicaidPct}% Medicaid / ${cell.b340Pct}% 340B → GTN ${cell.gtnSpread!.toFixed(2)}%`
                               }
                             >
@@ -537,33 +575,29 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
               RECOMMENDATION TEXT
           ════════════════════════════════════════════════ */}
           {(() => {
-            const cascadeAlways =
-              results.optimal.bestPriceTriggered && results.worst.bestPriceTriggered;
-            const cascadeNever =
-              !results.optimal.bestPriceTriggered && !results.worst.bestPriceTriggered;
-
-            let mixDirectionText: string;
-            if (cascadeAlways) {
-              mixDirectionText =
-                `With the current ${inputs.commercialRebatePercentage}% rebate triggering the Best Price ` +
-                `cascade, Medicaid net revenue per unit ($${(inputs.wac - results.optimal.medicaidVol > 0 ? inputs.wac - (inputs.wac * inputs.ampPercentage / 100 - results.optimal.incrementalMedicaidExposure / Math.max(1, results.optimal.medicaidVol)) : inputs.wac).toFixed(0)}) ` +
-                `exceeds commercial ($${(inputs.wac * (1 - inputs.commercialRebatePercentage / 100)).toFixed(0)}/unit). ` +
-                `The optimizer shifts volume toward Medicaid to capture this advantage.`;
-              // simpler version
-              mixDirectionText =
-                `With the current ${inputs.commercialRebatePercentage}% rebate triggering the Best Price cascade, ` +
-                `Medicaid net revenue per unit exceeds commercial net revenue per unit. ` +
-                `The optimizer shifts volume toward higher-net channels to minimize GTN erosion.`;
-            } else if (cascadeNever) {
-              mixDirectionText =
-                `Without a Best Price cascade at the current ${inputs.commercialRebatePercentage}% rebate, ` +
-                `commercial channel yields the highest net revenue per unit — ` +
-                `maximizing commercial percentage reduces GTN erosion.`;
-            } else {
-              mixDirectionText =
-                `The optimizer identifies the mix boundary where the Best Price cascade triggers, ` +
-                `balancing commercial and Medicaid volumes to minimize GTN erosion across both regimes.`;
-            }
+            const p = results.channelNetPrices;
+            const ranked = [
+              { name: "Medicaid", price: p.medicaid },
+              { name: "commercial", price: p.commercial },
+              { name: "340B", price: p.b340 },
+            ].sort((a, b) => b.price - a.price);
+            const topNames = ranked
+              .filter((c) => ranked[0].price - c.price < 0.005)
+              .map((c) => c.name)
+              .join(" and ");
+            const topSentence = topNames.charAt(0).toUpperCase() + topNames.slice(1);
+            const cascadeClause = results.optimal.bestPriceTriggered
+              ? "the Best Price cascade is triggered."
+              : "the rebate is below the Best Price cascade threshold.";
+            const mixDirectionText =
+              `${cascadeClause} ${topSentence} ${topNames.includes(" and ") ? "net" : "nets"} the most per unit, ` +
+              `so the optimizer shifts volume toward ${topNames} to minimize GTN erosion.`;
+            const commercialIsTop = p.commercial >= Math.max(p.medicaid, p.b340) - 0.005;
+            const crossoverNote = commercialIsTop
+              ? `Above a ${results.commercialLeadsBelowRebatePct.toFixed(1)}% commercial rebate, Medicaid would net more ` +
+                `per unit than commercial and the optimal mix would shift toward Medicaid.`
+              : `Commercial nets the most per unit only at a commercial rebate of ` +
+                `${results.commercialLeadsBelowRebatePct.toFixed(1)}% or lower.`;
 
             return (
               <div className="rounded-xl border border-gray-100 bg-[#FAF7F2] px-5 py-4 flex flex-col gap-2">
@@ -599,16 +633,7 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
                     {results.current.b340Pct.toFixed(0)}%
                   </span>{" "}
                   (GTN {results.current.gtnSpread.toFixed(2)}%).
-                  {cascadeAlways && (
-                    <span className="text-amber-700">
-                      {" "}Note: the Best Price cascade is active at this rebate level for all mix
-                      combinations — reducing the commercial rebate below the cascade threshold
-                      ({inputs.currentBestPrice / inputs.wac < 1
-                        ? ((1 - inputs.currentBestPrice / inputs.wac) * 100).toFixed(1)
-                        : "0.0"}
-                      %) would shift the optimal mix back toward commercial.
-                    </span>
-                  )}
+                  <span className="text-amber-700">{" "}Note: {crossoverNote}</span>
                 </p>
               </div>
             );

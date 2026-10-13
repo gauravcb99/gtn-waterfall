@@ -264,7 +264,8 @@ export function calculateWacCompression(
 // ─── IRA Negotiation Impact ──────────────────────────────────────────────────
 
 export interface IRAImpactInputs {
-  yearsOnMarket: number;
+  yearsOnMarket: number;        // full years since FDA approval/licensure, counted to Jan 1 of the price applicability year
+  ipay: number;                 // initial price applicability year
   nonFederalAMP: number;
   medicarePartDVolume: number;
   medicarePartDRebatePct: number;
@@ -272,7 +273,7 @@ export interface IRAImpactInputs {
 }
 
 export interface IRAImpactResults {
-  ceilingPct: number;           // 0.75 | 0.60 | 0.40
+  ceilingPct: number;           // 0.75 | 0.65 | 0.40
   iraPriceCeiling: number;      // Non-Federal AMP * ceilingPct
   currentMedicareNetPrice: number;
   iraNegotiatedPrice: number;
@@ -294,6 +295,7 @@ export function calculateIRAImpact(
 ): IRAImpactResults {
   const {
     yearsOnMarket,
+    ipay,
     nonFederalAMP,
     medicarePartDVolume,
     medicarePartDRebatePct,
@@ -301,13 +303,19 @@ export function calculateIRAImpact(
   } = iraInputs;
 
   // Step 1: Determine ceiling percentage
+  // SSA §1194(c)(3)-(5) / 42 USC 1320f-3(c)(3)-(5)
+  // 40% long-monopoly: 16+ years since approval
+  // 65% extended-monopoly: 12 to 15 years, only for price applicability years 2030+
+  //     (statute excludes drugs with an agreement for a price year before 2030)
+  // 75% short-monopoly: everything else
+  // Not modeled: vaccines (always 75%) and drugs first selected before 2030 then renegotiated (stay at 75% until long-monopoly)
   let ceilingPct: number;
-  if (yearsOnMarket >= 20) {
+  if (yearsOnMarket >= 16) {
     ceilingPct = 0.40;
-  } else if (yearsOnMarket >= 16) {
-    ceilingPct = 0.60;
+  } else if (yearsOnMarket >= 12 && ipay >= 2030) {
+    ceilingPct = 0.65;
   } else {
-    ceilingPct = 0.75; // 9-15 years
+    ceilingPct = 0.75;
   }
 
   const iraPriceCeiling = nonFederalAMP * ceilingPct;

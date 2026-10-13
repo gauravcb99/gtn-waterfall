@@ -114,6 +114,7 @@ function CustomTooltip({
 
 interface IRADrafts {
   yearsOnMarket: string;
+  ipay: string;
   nonFederalAMP: string;
   medicarePartDVolume: string;
   medicarePartDRebatePct: string;
@@ -138,6 +139,7 @@ export default function IRAImpactScenario({
 
   const [drafts, setDrafts] = useState<IRADrafts>({
     yearsOnMarket: "10",
+    ipay: "2028",
     nonFederalAMP: String(results.amp),
     medicarePartDVolume: "15000",
     medicarePartDRebatePct: "20",
@@ -159,6 +161,7 @@ export default function IRAImpactScenario({
   // Parse drafts to numbers for calculation
   const parsedInputs: IRAImpactInputs = {
     yearsOnMarket: parseNum(drafts.yearsOnMarket),
+    ipay: parseNum(drafts.ipay),
     nonFederalAMP: parseNum(drafts.nonFederalAMP),
     medicarePartDVolume: parseNum(drafts.medicarePartDVolume),
     medicarePartDRebatePct: parseNum(drafts.medicarePartDRebatePct),
@@ -174,8 +177,8 @@ export default function IRAImpactScenario({
   const ceilingLabel =
     iraResults.ceilingPct === 0.75
       ? "75%"
-      : iraResults.ceilingPct === 0.60
-      ? "60%"
+      : iraResults.ceilingPct === 0.65
+      ? "65%"
       : "40%";
 
   const chartData = [
@@ -227,11 +230,11 @@ export default function IRAImpactScenario({
       {isOpen && (
         <div className="border-t border-gray-100 px-6 py-5 flex flex-col gap-5">
           {/* ── Input row ────────────────────────────────────────── */}
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-6 gap-4">
             {/* Years on Market */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold uppercase tracking-wide text-[#0A4747]">
-                Years on Market
+                Years Since FDA Approval
               </label>
               <input
                 type="number"
@@ -240,6 +243,21 @@ export default function IRAImpactScenario({
                 className={inputClass}
                 value={drafts.yearsOnMarket}
                 onChange={(e) => setField("yearsOnMarket", e.target.value)}
+                onFocus={selectOnZero}
+              />
+            </div>
+            {/* Price Applicability Year */}
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold uppercase tracking-wide text-[#0A4747]">
+                Price Applicability Year
+              </label>
+              <input
+                type="number"
+                min={2026}
+                step={1}
+                className={inputClass}
+                value={drafts.ipay}
+                onChange={(e) => setField("ipay", e.target.value)}
                 onFocus={selectOnZero}
               />
             </div>
@@ -369,14 +387,14 @@ export default function IRAImpactScenario({
               sub={`${ceilingLabel} of Non-Federal AMP`}
               auditIcon={
                 <AuditIcon
-                  formula={`MFP Ceiling = WAC × (1 − applicable ceiling %) where ceiling % depends on years on market`}
+                  formula={`MFP Ceiling = Applicable % × Non-Federal AMP. Applicable %: 40% if 16+ years since FDA approval; 65% if 12 to 15 years and price year 2030 or later; 75% otherwise`}
                   inputs={[
-                    { name: "WAC", value: usd2.format(inputs.wac) },
                     { name: "Applicable Ceiling", value: ceilingLabel },
-                    { name: "Years on Market", value: String(parsedInputs.yearsOnMarket) },
+                    { name: "Years Since FDA Approval", value: String(parsedInputs.yearsOnMarket) },
+                    { name: "Price Applicability Year", value: String(parsedInputs.ipay) },
                     { name: "Non-Federal AMP", value: usd2.format(parsedInputs.nonFederalAMP) },
                   ]}
-                  citation="IRA Section 11001; SSA §1192(c)(3) — Maximum Fair Price ceiling"
+                  citation="IRA Section 11001; SSA §1194(c)(3)-(5), 42 USC 1320f-3(c)(3)-(5): Maximum Fair Price ceiling"
                 />
               }
             />
@@ -421,7 +439,7 @@ export default function IRAImpactScenario({
               <tbody>
                 {[
                   {
-                    label: "Years on Market",
+                    label: "Years Since FDA Approval",
                     value: `${parsedInputs.yearsOnMarket}`,
                   },
                   {

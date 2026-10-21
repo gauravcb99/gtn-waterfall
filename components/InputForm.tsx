@@ -116,6 +116,9 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
   const [cmsFields, setCmsFields] = useState<Set<keyof InputValues>>(new Set());
   // Tracks whether Best Price was auto-set from a CMS load
   const [bestPriceAutoSet, setBestPriceAutoSet] = useState(false);
+  // True when the next `values` change comes from this form (CMS load or typing),
+  // so the scenario-load effect below doesn't wipe the CMS highlights and 85% note
+  const internalChangeRef = useRef(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -139,11 +142,16 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
       return changed ? next : prev;
     });
     // When values change externally (scenario load), clear CMS highlights and auto-set note
-    setCmsFields(new Set());
-    setBestPriceAutoSet(false);
+    if (internalChangeRef.current) {
+      internalChangeRef.current = false;
+    } else {
+      setCmsFields(new Set());
+      setBestPriceAutoSet(false);
+    }
   }, [values]);
 
   function set(key: keyof InputValues, raw: string) {
+    internalChangeRef.current = true;
     // Clear CMS highlight when user manually edits a field
     setCmsFields((prev) => {
       if (!prev.has(key)) return prev;
@@ -240,6 +248,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
     }
 
     setDrafts((prev) => ({ ...prev, ...newDrugs }));
+    internalChangeRef.current = true;
     onChange({ ...values, ...newValues });
     setCmsFields(populated);
     setBestPriceAutoSet(true);

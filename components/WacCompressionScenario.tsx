@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronRight, TrendingDown } from "lucide-react";
 import {
   InputValues,
@@ -119,12 +119,28 @@ const DEFAULT_DRAFTS: CompressionDrafts = {
   wholesalerMarginPct: "4",
 };
 
+// Default New WAC: a 15% cut from the current WAC (850 on the $1,000 sample drug)
+function defaultNewWac(wac: number): string {
+  return String(Math.round(wac * 85) / 100);
+}
+
 export default function WacCompressionScenario({
   inputs,
   results,
 }: WacCompressionScenarioProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [drafts, setDrafts] = useState<CompressionDrafts>(DEFAULT_DRAFTS);
+  const [drafts, setDrafts] = useState<CompressionDrafts>(() => ({
+    ...DEFAULT_DRAFTS,
+    newWac: defaultNewWac(inputs.wac),
+  }));
+  const [newWacOverridden, setNewWacOverridden] = useState(false);
+
+  // Keep New WAC at a 15% cut of the current WAC unless the user has typed their own
+  useEffect(() => {
+    if (!newWacOverridden) {
+      setDrafts((prev) => ({ ...prev, newWac: defaultNewWac(inputs.wac) }));
+    }
+  }, [inputs.wac, newWacOverridden]);
 
   // Derive numeric inputs from the draft strings for calculations
   const compressionInputs: WacCompressionInputs = {
@@ -142,6 +158,7 @@ export default function WacCompressionScenario({
     : null;
 
   function setField(key: keyof CompressionDrafts, raw: string) {
+    if (key === "newWac") setNewWacOverridden(true);
     setDrafts((prev) => ({ ...prev, [key]: raw }));
   }
 

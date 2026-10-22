@@ -77,6 +77,10 @@ function ChangeCell({ original, updated }: { original: number; updated: number }
 
 function PctChangeCell({ original, updated }: { original: number; updated: number }) {
   const delta = updated - original;
+  // A change that rounds to 0.0 shows as a neutral 0.0pp, not +0.0pp or -0.0pp
+  if (Math.abs(delta).toFixed(1) === "0.0") {
+    return <span className="font-semibold text-gray-500">0.0pp</span>;
+  }
   const sign = delta >= 0 ? "+" : "";
   const color = delta > 0 ? "text-red-600" : "text-emerald-600";
   return (

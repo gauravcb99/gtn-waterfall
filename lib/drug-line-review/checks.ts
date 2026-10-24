@@ -50,8 +50,10 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
     return { status: "ran", drugId: drug.id, results };
   }
   results.push({
-    id: "dose", status: "info", message: `dose ${dose.doseAmount} = ${dose.doseUnits} billing units`,
-    values: { doseAmount: dose.doseAmount, doseUnits: dose.doseUnits }, citations: [buCite], formula: dose.formula,
+    id: "dose", status: "info",
+    message: `dose ${dose.doseAmount} = ${dose.doseUnits} billing units${dose.cap ? `, ${dose.cap.text}` : ""}`,
+    values: { doseAmount: dose.doseAmount, doseUnits: dose.doseUnits, capped: !!dose.cap },
+    citations: dose.cap ? [buCite, dose.cap.cite] : [buCite], formula: dose.formula,
   });
 
   // Vials and waste.

@@ -1,8 +1,8 @@
 import { measure, round4 } from "./data";
-import type { ClaimLine, Drug } from "./types";
+import type { Citation, ClaimLine, Drug } from "./types";
 
 export type DoseCalc =
-  | { ok: true; doseAmount: number; doseUnits: number; formula: string }
+  | { ok: true; doseAmount: number; doseUnits: number; formula: string; cap?: { text: string; cite: Citation } }
   | { ok: false; reason: string };
 
 // Converts the documented dose into the drug's billing measure (e.g. mg) and billing units.
@@ -28,8 +28,23 @@ export function computeDose(line: ClaimLine, drug: Drug): DoseCalc {
     doseAmount = amount;
     formula = `${amount} ${unit}`;
   }
+
+  // Label maximum total dose, applied to computed (weight- or BSA-based) doses only.
+  let cap: { text: string; cite: Citation } | undefined;
+  const maxes = drug.dosing.flatMap((x) => (x.maxTotalDose ? [x.maxTotalDose] : []));
+  if (maxes.length > 1) return { ok: false, reason: "more than one label maximum dose; indication is not modeled" };
+  if (maxes.length && (unit === "mg/kg" || unit === "mg/m2")) {
+    const max = maxes[0].value;
+    if (measure(max.unit) !== measure(bu.unit))
+      return { ok: false, reason: `label maximum unit "${max.unit}" does not match the billing unit ${drug.billingUnitRaw.value}` };
+    if (doseAmount > max.amount) {
+      cap = { text: `capped at label maximum (${max.amount} ${max.unit})`, cite: maxes[0].cite };
+      doseAmount = max.amount;
+      formula += `; ${cap.text}`;
+    }
+  }
   const doseUnits = round4(doseAmount / bu.amount);
-  return { ok: true, doseAmount, doseUnits, formula: `${formula}; / ${drug.billingUnitRaw.value} = ${doseUnits} units` };
+  return { ok: true, doseAmount, doseUnits, cap, formula: `${formula}; / ${drug.billingUnitRaw.value} = ${doseUnits} units` };
 }
 
 // Smallest total >= dose that the vial sizes can make; fewest vials breaks ties. Sorted largest first.

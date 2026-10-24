@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { parseCsv, validateDrugs } from "./build-drug-line-data";
 import { EXCLUDED_PRODUCTS, matchLine } from "../lib/drug-line-review/match";
 import cmsJson from "../data/drug-line-review/cms-asp-oct-2026.json";
+import { drugs } from "../lib/drug-line-review/data";
 import { runChecks } from "../lib/drug-line-review/checks";
 import type { CheckResult, ClaimLine } from "../lib/drug-line-review/types";
 
@@ -488,6 +489,44 @@ test("2.2 guard: every exclusion name exists in the CMS crosswalk JSON (fails if
       cmsJson.crosswalk.some((r) => r.drugName.trim().toUpperCase() === name),
       `no crosswalk row has drug name "${name}"; CMS may have renamed the product, update the exclusion`,
     );
+});
+
+// --- Stage 2.3 ---
+
+test("2.3 J2997 0.9 mg/kg, 110 kg: capped at the label maximum 90 mg, one 100 mg vial, waste 10", () => {
+  const { get } = check(
+    line({
+      hcpcs: "J2997", dose: { amount: 0.9, unit: "mg/kg" }, weightKg: 110,
+      unitsBilled: 90, jwUnitsBilled: 10, amountBilled: 5000,
+    }),
+    "J2997",
+  );
+  assert.equal(get("dose").values.doseAmount, 90);
+  assert.equal(get("dose").values.capped, true);
+  assert.match(get("dose").message, /capped at label maximum \(90 mg\)/);
+  assert.ok(get("dose").citations.some((c) => c.section === "2.1 Acute Ischemic Stroke" && /not to exceed 90 mg/.test(c.quote)));
+  assert.deepEqual(get("vials").values.vials, [100]);
+  assert.equal(get("vials").values.waste, 10);
+  assert.equal(get("units").status, "pass");
+  assert.equal(get("jw_jz").status, "pass");
+});
+
+test("2.3 J2997 0.9 mg/kg, 70 kg: 63 mg, not capped", () => {
+  const { get } = check(
+    line({ hcpcs: "J2997", dose: { amount: 0.9, unit: "mg/kg" }, weightKg: 70, unitsBilled: 63, jwUnitsBilled: 37 }),
+    "J2997",
+  );
+  assert.equal(get("dose").values.doseAmount, 63);
+  assert.equal(get("dose").values.capped, false);
+  assert.doesNotMatch(get("dose").message, /capped/);
+});
+
+test("2.3 maxTotalDose appears only on the Activase entry, cited with the label quote", () => {
+  const withMax = drugs.flatMap((d) => d.dosing.filter((x) => x.maxTotalDose).map((x) => ({ id: d.id, x })));
+  assert.equal(withMax.length, 1);
+  assert.equal(withMax[0].id, "J2997");
+  assert.deepEqual(withMax[0].x.maxTotalDose!.value, { amount: 90, unit: "mg" });
+  assert.match(withMax[0].x.maxTotalDose!.cite.quote, /not to exceed 90 mg total dose/);
 });
 
 if (failed) {

@@ -45,6 +45,11 @@ export type Drug = {
   billingUnit: Cited<{ amount: number; unit: string }>;
   vialSizes: Cited<{ amount: number; unit: string; ndcs: string[] }>[];
   singleDose: Cited<boolean>;
+  dosing: {
+    indication: Cited<string>;
+    dose: Cited<{ amount: number; unit: string }>;
+    maxTotalDose?: Cited<{ amount: number; unit: string }>;
+  }[];
 };
 
 export type MatchCandidate = {

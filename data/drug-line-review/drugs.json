@@ -163,7 +163,11 @@
             "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "Acute Ischemic Stroke" }
           },
           "dose": {
-            "value": { "amount": 0.9, "unit": "mg/kg", "maxAmount": 90, "maxUnit": "mg" },
+            "value": { "amount": 0.9, "unit": "mg/kg" },
+            "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "The recommended dose is 0.9 mg/kg (not to exceed 90 mg total dose), with 10% of the total dose administered as an initial intravenous bolus over 1 minute and the remainder infused over 60 minutes." }
+          },
+          "maxTotalDose": {
+            "value": { "amount": 90, "unit": "mg" },
             "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "The recommended dose is 0.9 mg/kg (not to exceed 90 mg total dose), with 10% of the total dose administered as an initial intravenous bolus over 1 minute and the remainder infused over 60 minutes." }
           },
           "regimen": {

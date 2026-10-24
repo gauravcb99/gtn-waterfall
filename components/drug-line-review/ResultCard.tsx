@@ -1,18 +1,8 @@
 "use client";
 
-import type { CheckResult, CheckStatus } from "@/lib/drug-line-review/types";
+import type { CheckResult, CheckStatus, Citation } from "@/lib/drug-line-review/types";
+import { TITLES, type Display } from "./display";
 import { displayTitle, sourceById } from "./sources";
-
-const TITLES: Record<CheckResult["id"], string> = {
-  dose: "Dose",
-  dose_advisory: "Label maximum",
-  vials: "Vials and waste",
-  vial_advisory: "Vial choice",
-  units: "Units billed",
-  jw_jz: "JW / JZ modifiers",
-  benchmark: "Benchmark vs CMS payment limit",
-  dollars: "Dollars at stake",
-};
 
 const CHIPS: Record<CheckStatus, { label: string; className: string }> = {
   pass: { label: "pass", className: "bg-emerald-50 text-emerald-700" },
@@ -23,48 +13,20 @@ const CHIPS: Record<CheckStatus, { label: string; className: string }> = {
   not_applicable: { label: "not applicable", className: "bg-gray-50 text-gray-500" },
 };
 
-const VALUE_LABELS: Record<string, string> = {
-  doseAmount: "Dose (billing measure)",
-  doseUnits: "Dose in billing units",
-  capped: "Capped at label maximum",
-  vials: "Vials",
-  basis: "Vial basis",
-  drawn: "Drawn",
-  waste: "Waste",
-  wasteUnits: "Waste (billing units)",
-  maxValidUnits: "Max valid units",
-  leastWasteVials: "Least-waste vials",
-  leastWaste: "Least possible waste",
-  totalBilled: "Total billed units",
-  excess: "Excess units",
-  expected: "Expected modifier",
-  administeredUnits: "Administered units",
-  jwUnitsBilled: "JW units billed",
-  jzReported: "JZ reported",
-  paymentLimit: "CMS payment limit (per unit)",
-  billedPerUnit: "Billed per unit",
-  markup: "Markup",
-  benchmarkTotal: "Benchmark total",
-  quarter: "Quarter",
-  amount: "Amount",
-  amountAtBilledRate: "At billed rate",
-  amountAtPaymentLimit: "At CMS payment limit",
-};
-
-function formatValue(key: string, v: number | string | boolean | number[]): string {
-  if (Array.isArray(v)) return v.join(" + ");
-  if (typeof v === "boolean") return v ? "yes" : "no";
-  if (typeof v === "string") return v;
-  if (key === "markup") return `${v.toFixed(2)}x`;
-  if (key === "paymentLimit") return `$${v}`; // shown exactly as in the CMS file
-  if (["billedPerUnit", "benchmarkTotal", "amount", "amountAtBilledRate", "amountAtPaymentLimit"].includes(key))
-    return v.toLocaleString("en-US", { style: "currency", currency: "USD" });
-  return String(v);
+// Each distinct citation once per card.
+function distinct(citations: Citation[]): Citation[] {
+  const seen = new Set<string>();
+  return citations.filter((c) => {
+    const key = JSON.stringify([c.source, c.setid, c.file, c.section, c.quote]);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
-export default function ResultCard({ result }: { result: CheckResult }) {
+export default function ResultCard({ result, display }: { result: CheckResult; display: Display }) {
   const chip = CHIPS[result.status];
-  const entries = Object.entries(result.values);
+  const citations = distinct(result.citations);
   return (
     <article className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm flex flex-col gap-3">
       {result.id === "dollars" && result.label && (
@@ -78,45 +40,50 @@ export default function ResultCard({ result }: { result: CheckResult }) {
           {chip.label}
         </span>
       </div>
-      <p className="text-sm text-ink">{result.message}</p>
+      <p className="text-sm text-ink">{display.message}</p>
       {result.id !== "dollars" && result.label && <p className="text-xs text-gray-500">{result.label}</p>}
-      {entries.length > 0 && (
+      {display.rows.length > 0 && (
         <dl className="grid grid-cols-1 gap-x-6 gap-y-1 text-xs sm:grid-cols-2">
-          {entries.map(([k, v]) => (
+          {display.rows.map(([k, v]) => (
             <div key={k} className="flex justify-between gap-3 border-b border-gray-50 py-1">
-              <dt className="text-gray-500">{VALUE_LABELS[k] ?? k}</dt>
-              <dd className="font-semibold text-ink text-right">{formatValue(k, v)}</dd>
+              <dt className="text-gray-500">{k}</dt>
+              <dd className="font-semibold text-ink text-right">{v}</dd>
             </div>
           ))}
         </dl>
       )}
-      {result.formula && (
+      {display.formula && (
         <div className="rounded-lg bg-[#F8FAFA] px-3 py-2 text-xs text-ink">
           <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mr-2">Formula</span>
-          <span className="font-mono">{result.formula}</span>
+          <span className="font-mono">{display.formula}</span>
         </div>
       )}
-      <div className="flex flex-col gap-2">
-        {result.citations.map((c, i) => {
-          const s = sourceById(c.source);
-          return (
-            <div key={i} className="rounded-lg border-l-4 border-[#C9A86A] bg-cream p-3 text-xs flex flex-col gap-1">
-              <div className="font-semibold text-[#0A4747]">{s ? displayTitle(s) : c.source}</div>
-              <div className="text-gray-500">
-                Section: {c.section}
-                {c.setid && <> · setid {c.setid}</>}
-                {c.file && !c.file.startsWith("http") && <> · {c.file}</>}
-              </div>
-              <blockquote className="italic text-ink break-words">&ldquo;{c.quote}&rdquo;</blockquote>
-              {s && (
-                <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-[#0A4747] underline break-all">
-                  {s.url}
-                </a>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {citations.length > 0 && (
+        <details className="text-xs">
+          <summary className="cursor-pointer select-none font-semibold text-[#0A4747]">Sources ({citations.length})</summary>
+          <div className="mt-2 flex flex-col gap-2">
+            {citations.map((c, i) => {
+              const s = sourceById(c.source);
+              return (
+                <div key={i} className="rounded-lg border-l-4 border-[#C9A86A] bg-cream p-3 flex flex-col gap-1">
+                  <div className="font-semibold text-[#0A4747]">{s ? displayTitle(s) : c.source}</div>
+                  <div className="text-gray-500">
+                    Section: {c.section}
+                    {c.setid && <> · setid {c.setid}</>}
+                    {c.file && !c.file.startsWith("http") && <> · {c.file}</>}
+                  </div>
+                  <blockquote className="italic text-ink break-words">&ldquo;{c.quote}&rdquo;</blockquote>
+                  {s && (
+                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-[#0A4747] underline break-all">
+                      {s.url}
+                    </a>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </details>
+      )}
     </article>
   );
 }

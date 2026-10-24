@@ -4,8 +4,9 @@ import { useState } from "react";
 import { runChecks } from "@/lib/drug-line-review/checks";
 import { findDrug } from "@/lib/drug-line-review/data";
 import { matchLine } from "@/lib/drug-line-review/match";
-import type { ChecksOutcome, MatchResult } from "@/lib/drug-line-review/types";
+import type { ChecksOutcome, ClaimLine, MatchResult } from "@/lib/drug-line-review/types";
 import ClaimForm from "./ClaimForm";
+import { describe, summarize } from "./display";
 import { EXAMPLES } from "./examples";
 import { EMPTY_CLAIM, EMPTY_RECORD, toClaimLine, type ClaimFormState, type RecordFormState } from "./forms";
 import MatchCard from "./MatchCard";
@@ -22,7 +23,8 @@ export default function DrugLineReview() {
   const [illustrativeCharge, setIllustrativeCharge] = useState(false);
   const [match, setMatch] = useState<MatchResult | null>(null);
   const [drugId, setDrugId] = useState<string | null>(null);
-  const [outcome, setOutcome] = useState<ChecksOutcome | null>(null);
+  // The checks outcome together with the exact claim line it was run on (the display reads both).
+  const [ran, setRan] = useState<{ line: ClaimLine; outcome: ChecksOutcome } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const drug = drugId ? findDrug(drugId) : undefined;
@@ -35,19 +37,19 @@ export default function DrugLineReview() {
       setMatch(null);
       setDrugId(null);
     }
-    setOutcome(null);
+    setRan(null);
   }
 
   function editRecord(patch: Partial<RecordFormState>) {
     setRecord((r) => ({ ...r, ...patch }));
-    setOutcome(null);
+    setRan(null);
     setError(null);
   }
 
   function find(c: ClaimFormState) {
     setMatch(matchLine(c));
     setDrugId(null);
-    setOutcome(null);
+    setRan(null);
     setError(null);
   }
 
@@ -63,11 +65,11 @@ export default function DrugLineReview() {
     const r = toClaimLine(claim, record);
     if ("error" in r) {
       setError(r.error);
-      setOutcome(null);
+      setRan(null);
       return;
     }
     setError(null);
-    setOutcome(runChecks(r.line, drugId));
+    setRan({ line: r.line, outcome: runChecks(r.line, drugId) });
   }
 
   return (
@@ -104,18 +106,37 @@ export default function DrugLineReview() {
           illustrativeCharge={illustrativeCharge} />
 
         {match && (
-          <MatchCard match={match} confirmedId={drugId} onConfirm={(id) => { setDrugId(id); setOutcome(null); }} />
+          <MatchCard match={match} confirmedId={drugId} onConfirm={(id) => { setDrugId(id); setRan(null); }} />
         )}
 
         {drug && <RecordForm drug={drug} record={record} onChange={editRecord} onRun={run} error={error} />}
 
-        {drug && outcome && (
+        {drug && ran && (
           <section className="flex flex-col gap-4">
             <CardTitle step={4}>Results</CardTitle>
-            {outcome.status === "refused" ? (
-              <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{outcome.reason}</p>
+            {ran.outcome.status === "refused" ? (
+              <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{ran.outcome.reason}</p>
             ) : (
-              outcome.results.map((r) => <ResultCard key={r.id} result={r} />)
+              (() => {
+                const ctx = { drug, line: ran.line, results: ran.outcome.results };
+                const results = ran.outcome.results;
+                const tone = results.some((r) => r.status === "flag")
+                  ? "border-red-200 bg-red-50"
+                  : results.some((r) => r.status === "advisory" || r.status === "needs_info")
+                    ? "border-amber-200 bg-amber-50"
+                    : "border-emerald-200 bg-emerald-50";
+                return (
+                  <>
+                    <div className={`rounded-xl border p-4 ${tone}`}>
+                      <div className="text-[10px] font-semibold uppercase tracking-widest text-gray-500 mb-1">Summary</div>
+                      <p className="text-sm font-semibold text-ink">{summarize(ctx)}</p>
+                    </div>
+                    {results.map((r) => (
+                      <ResultCard key={r.id} result={r} display={describe(r, ctx)} />
+                    ))}
+                  </>
+                );
+              })()
             )}
           </section>
         )}

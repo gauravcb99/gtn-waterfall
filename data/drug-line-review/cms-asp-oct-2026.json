@@ -1,0 +1,273 @@
+{
+  "metadata": {
+    "quarter": "October 2026",
+    "effective": "October 1, 2026 through December 31, 2026",
+    "fileDate": "091626",
+    "cmsPageStatus": "Final, 09/17/2026",
+    "downloadDate": "2026-10-23",
+    "sourceUrl": "https://www.cms.gov/medicare/payment/part-b-drugs/asp-pricing-files",
+    "paymentLimitFile": {
+      "folder": "october_2026_medicare_part_b_payment_limit_file_091626-final_file",
+      "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv",
+      "headerRow": [
+        "HCPCS Code",
+        "Short Description",
+        "HCPCS Code Dosage",
+        "Payment Limit",
+        "Co-insurance Percentage",
+        "Vaccine AWP%",
+        "Vaccine Limit",
+        "Blood AWP%",
+        "Blood limit",
+        "Clotting Factor",
+        "Notes",
+        "",
+        ""
+      ],
+      "dataRowCount": 918,
+      "columnsUsed": {
+        "hcpcs": "HCPCS Code",
+        "shortDescription": "Short Description",
+        "dosage": "HCPCS Code Dosage",
+        "paymentLimit": "Payment Limit"
+      }
+    },
+    "crosswalkFile": {
+      "folder": "october_2026_asp_ndc_hcpcs_crosswalk_091626",
+      "file": "section 508 version of October 2026 ASP NDC-HCPCS Crosswalk 091126.csv",
+      "headerRow": [
+        "_2026_CODE",
+        "Short Description",
+        "LABELER NAME",
+        "NDC",
+        "Drug Name",
+        "HCPCS dosage",
+        "PKG SIZE",
+        "PKG QTY",
+        "BILLUNITS",
+        "BILLUNITSPKG"
+      ],
+      "dataRowCount": 7403,
+      "columnsUsed": {
+        "hcpcs": "_2026_CODE",
+        "shortDescription": "Short Description",
+        "labelerName": "LABELER NAME",
+        "ndc": "NDC",
+        "drugName": "Drug Name",
+        "dosage": "HCPCS dosage",
+        "pkgSize": "PKG SIZE",
+        "pkgQty": "PKG QTY",
+        "billUnits": "BILLUNITS",
+        "billUnitsPkg": "BILLUNITSPKG"
+      },
+      "columnMeanings": {
+        "pkgSize": "PKG SIZE = Package Size: amount in one item",
+        "pkgQty": "PKG QTY = Package Quantity: number of items in the NDC",
+        "billUnitsPerItem": "BILLUNITS = Billable Units Per Package (one item)",
+        "billUnitsPerNdc": "BILLUNITSPKG = Billable Units Per 11-Digit NDC"
+      }
+    }
+  },
+  "codes": [
+    {
+      "hcpcs": "J0585",
+      "shortDescription": "Injection,onabotulinumtoxina",
+      "dosage": "1 UNIT",
+      "paymentLimit": 6.514
+    },
+    {
+      "hcpcs": "J1745",
+      "shortDescription": "Infliximab not biosimil 10mg",
+      "dosage": "10 MG",
+      "paymentLimit": 29.856
+    },
+    {
+      "hcpcs": "J2997",
+      "shortDescription": "Alteplase recombinant",
+      "dosage": "1 MG",
+      "paymentLimit": 98.416
+    },
+    {
+      "hcpcs": "J9035",
+      "shortDescription": "Bevacizumab injection",
+      "dosage": "10 MG",
+      "paymentLimit": 75.492
+    },
+    {
+      "hcpcs": "J9312",
+      "shortDescription": "Inj., rituximab, 10 mg",
+      "dosage": "10 MG",
+      "paymentLimit": 72.094
+    }
+  ],
+  "crosswalk": [
+    {
+      "hcpcs": "J0585",
+      "shortDescription": "Injection,onabotulinumtoxina",
+      "labelerName": "Allergan, Inc.",
+      "ndc": "00023-1145-01",
+      "drugName": "Botox",
+      "dosage": "1 UNIT",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 100,
+      "billUnitsPerNdc": 100
+    },
+    {
+      "hcpcs": "J0585",
+      "shortDescription": "Injection,onabotulinumtoxina",
+      "labelerName": "Allergan, Inc.",
+      "ndc": "00023-3919-50",
+      "drugName": "Botox Cosmetic",
+      "dosage": "1 UNIT",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 50,
+      "billUnitsPerNdc": 50
+    },
+    {
+      "hcpcs": "J0585",
+      "shortDescription": "Injection,onabotulinumtoxina",
+      "labelerName": "Allergan, Inc.",
+      "ndc": "00023-3921-02",
+      "drugName": "Botox",
+      "dosage": "1 UNIT",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 200,
+      "billUnitsPerNdc": 200
+    },
+    {
+      "hcpcs": "J0585",
+      "shortDescription": "Injection,onabotulinumtoxina",
+      "labelerName": "Allergan, Inc.",
+      "ndc": "00023-9232-01",
+      "drugName": "Botox Cosmetic",
+      "dosage": "1 UNIT",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 100,
+      "billUnitsPerNdc": 100
+    },
+    {
+      "hcpcs": "J1745",
+      "shortDescription": "Infliximab not biosimil 10mg",
+      "labelerName": "Janssen Biotech, Inc.",
+      "ndc": "57894-0030-01",
+      "drugName": "Remicade",
+      "dosage": "10 MG",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 10,
+      "billUnitsPerNdc": 10
+    },
+    {
+      "hcpcs": "J1745",
+      "shortDescription": "Infliximab not biosimil 10mg",
+      "labelerName": "Janssen Biotech, Inc.",
+      "ndc": "57894-0160-01",
+      "drugName": "Infliximab",
+      "dosage": "10 MG",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 10,
+      "billUnitsPerNdc": 10
+    },
+    {
+      "hcpcs": "J2997",
+      "shortDescription": "Alteplase recombinant",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0041-10",
+      "drugName": "Cathflo Activase",
+      "dosage": "1 MG",
+      "pkgSize": 1,
+      "pkgQty": 10,
+      "billUnitsPerItem": 2,
+      "billUnitsPerNdc": 20
+    },
+    {
+      "hcpcs": "J2997",
+      "shortDescription": "Alteplase recombinant",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0041-64",
+      "drugName": "Cathflo Activase",
+      "dosage": "1 MG",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 2,
+      "billUnitsPerNdc": 2
+    },
+    {
+      "hcpcs": "J2997",
+      "shortDescription": "Alteplase recombinant",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0044-13",
+      "drugName": "Activase",
+      "dosage": "1 MG",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 50,
+      "billUnitsPerNdc": 50
+    },
+    {
+      "hcpcs": "J2997",
+      "shortDescription": "Alteplase recombinant",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0085-27",
+      "drugName": "Activase",
+      "dosage": "1 MG",
+      "pkgSize": 1,
+      "pkgQty": 1,
+      "billUnitsPerItem": 100,
+      "billUnitsPerNdc": 100
+    },
+    {
+      "hcpcs": "J9035",
+      "shortDescription": "Bevacizumab injection",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0060-01",
+      "drugName": "Avastin",
+      "dosage": "10 MG",
+      "pkgSize": 4,
+      "pkgQty": 1,
+      "billUnitsPerItem": 10,
+      "billUnitsPerNdc": 10
+    },
+    {
+      "hcpcs": "J9035",
+      "shortDescription": "Bevacizumab injection",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0061-01",
+      "drugName": "Avastin",
+      "dosage": "10 MG",
+      "pkgSize": 16,
+      "pkgQty": 1,
+      "billUnitsPerItem": 40,
+      "billUnitsPerNdc": 40
+    },
+    {
+      "hcpcs": "J9312",
+      "shortDescription": "Inj., rituximab, 10 mg",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0051-21",
+      "drugName": "Rituxan",
+      "dosage": "10 MG",
+      "pkgSize": 10,
+      "pkgQty": 1,
+      "billUnitsPerItem": 10,
+      "billUnitsPerNdc": 10
+    },
+    {
+      "hcpcs": "J9312",
+      "shortDescription": "Inj., rituximab, 10 mg",
+      "labelerName": "Genentech, Inc.",
+      "ndc": "50242-0053-06",
+      "drugName": "Rituxan",
+      "dosage": "10 MG",
+      "pkgSize": 50,
+      "pkgQty": 1,
+      "billUnitsPerItem": 50,
+      "billUnitsPerNdc": 50
+    }
+  ]
+}

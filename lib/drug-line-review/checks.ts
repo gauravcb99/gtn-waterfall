@@ -24,7 +24,7 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
   const totalBilled = round4(line.unitsBilled + line.jwUnitsBilled);
   let billedPerUnit: number | undefined;
   let benchmark: CheckResult;
-  if (totalBilled > 0) {
+  if (totalBilled > 0 && line.amountBilled !== undefined) {
     billedPerUnit = round4(line.amountBilled / totalBilled);
     const markup = round4(billedPerUnit / limit);
     const benchmarkTotal = round4(totalBilled * limit);
@@ -37,7 +37,10 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
         `/ $${limit} = ${markup.toFixed(2)}x; ${totalBilled} units x $${limit} = $${benchmarkTotal.toFixed(2)}`,
     };
   } else {
-    benchmark = { id: "benchmark", status: "needs_info", citations: [cmsCite], message: "no units billed", values: {} };
+    benchmark = {
+      id: "benchmark", status: "needs_info", citations: [cmsCite], values: {},
+      message: totalBilled > 0 ? "needs info: amount billed is blank" : "needs info: no units billed",
+    };
   }
 
   // Dose.
@@ -55,6 +58,8 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
     values: { doseAmount: dose.doseAmount, doseUnits: dose.doseUnits, capped: !!dose.cap },
     citations: dose.cap ? [buCite, dose.cap.cite] : [buCite], formula: dose.formula,
   });
+  if (dose.advisory)
+    results.push({ id: "dose_advisory", status: "advisory", message: dose.advisory.text, values: {}, citations: dose.advisory.cites });
 
   // Vials and waste.
   const sizes = drug.vialSizes.map((v) => v.value.amount);

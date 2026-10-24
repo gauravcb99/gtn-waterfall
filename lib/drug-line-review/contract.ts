@@ -28,7 +28,7 @@ export function dollarsAtStake(
     case "percent_of_charges": {
       const pct = line.chargesContractPercent;
       if (pct === undefined) return needs("chargesContractPercent is required for a percent of charges contract");
-      if (billedPerUnit === undefined) return needs("billed per unit is unavailable (no units billed)");
+      if (billedPerUnit === undefined) return needs("billed per unit is unavailable (amount billed blank or no units billed)");
       const amount = round4((excess * billedPerUnit * pct) / 100);
       return {
         ...base, status: "info", message: `${usd(amount)} at ${pct}% of billed charges`, values: { amount },
@@ -42,7 +42,7 @@ export function dollarsAtStake(
       };
     case "stoploss_outlier_carveout":
     case "reference_based": {
-      if (billedPerUnit === undefined) return needs("billed per unit is unavailable (no units billed)");
+      if (billedPerUnit === undefined) return needs("billed per unit is unavailable (amount billed blank or no units billed)");
       const amountAtBilledRate = round4(excess * billedPerUnit);
       const amountAtPaymentLimit = round4(excess * limit);
       return {

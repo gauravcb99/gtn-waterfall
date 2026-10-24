@@ -42,6 +42,7 @@
       },
       "dosing": [
         {
+          "id": "overactive_bladder",
           "indication": {
             "value": "Overactive Bladder",
             "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "2.3 Adult Bladder Dysfunction", "quote": "Overactive Bladder" }
@@ -52,6 +53,7 @@
           }
         },
         {
+          "id": "detrusor_overactivity_neurologic",
           "indication": {
             "value": "Detrusor Overactivity associated with a Neurologic Condition",
             "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "2.3 Adult Bladder Dysfunction", "quote": "Detrusor Overactivity associated with a Neurologic Condition" }
@@ -101,6 +103,7 @@
       },
       "dosing": [
         {
+          "id": "adult_crohns_disease",
           "indication": {
             "value": "Adult Crohn's Disease",
             "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "2.1 Dosage in Adult Crohn's Disease", "quote": "Dosage in Adult Crohn's Disease" }
@@ -158,6 +161,7 @@
       },
       "dosing": [
         {
+          "id": "acute_ischemic_stroke",
           "indication": {
             "value": "Acute Ischemic Stroke",
             "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "Acute Ischemic Stroke" }
@@ -219,6 +223,7 @@
       },
       "dosing": [
         {
+          "id": "first_line_nonsquamous_nsclc",
           "indication": {
             "value": "First-Line Non-Squamous Non-Small Cell Lung Cancer",
             "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "2.3 First-Line Non-Squamous Non-Small Cell Lung Cancer", "quote": "First-Line Non-Squamous Non-Small Cell Lung Cancer" }
@@ -276,6 +281,7 @@
       },
       "dosing": [
         {
+          "id": "non_hodgkins_lymphoma",
           "indication": {
             "value": "Non-Hodgkin's Lymphoma (NHL)",
             "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.2 Recommended Dose for Non-Hodgkin's Lymphoma (NHL)", "quote": "Recommended Dose for Non-Hodgkin's Lymphoma (NHL)" }
@@ -286,6 +292,7 @@
           }
         },
         {
+          "id": "rheumatoid_arthritis",
           "indication": {
             "value": "Rheumatoid Arthritis (RA)",
             "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.5 Recommended Dose for Rheumatoid Arthritis (RA)", "quote": "Recommended Dose for Rheumatoid Arthritis (RA)" }

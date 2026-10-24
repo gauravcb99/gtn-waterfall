@@ -97,7 +97,10 @@ export function validateDrugs(drugsJson: unknown, cms: Cms, sources: Sources): s
     } else if (Array.isArray(node)) {
       node.forEach((n, i) => walk(n, `${at}[${i}]`));
     } else if (typeof node === "object" && node !== null) {
-      for (const [k, v] of Object.entries(node)) walk(v, `${at}.${k}`);
+      // "id" keys (e.g. dosing entry ids) are internal keys, not sourced values.
+      for (const [k, v] of Object.entries(node))
+        if (k !== "id") walk(v, `${at}.${k}`);
+        else if (!nonEmpty(v)) errors.push(`${at}.id: must be a non-empty string`);
     } else {
       errors.push(`${at}: uncited value ${JSON.stringify(node)}`);
     }

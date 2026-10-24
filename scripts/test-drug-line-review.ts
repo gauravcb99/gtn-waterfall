@@ -496,7 +496,7 @@ test("2.2 guard: every exclusion name exists in the CMS crosswalk JSON (fails if
 test("2.3 J2997 0.9 mg/kg, 110 kg: capped at the label maximum 90 mg, one 100 mg vial, waste 10", () => {
   const { get } = check(
     line({
-      hcpcs: "J2997", dose: { amount: 0.9, unit: "mg/kg" }, weightKg: 110,
+      hcpcs: "J2997", dose: { amount: 0.9, unit: "mg/kg" }, weightKg: 110, indicationId: "acute_ischemic_stroke",
       unitsBilled: 90, jwUnitsBilled: 10, amountBilled: 5000,
     }),
     "J2997",
@@ -527,6 +527,91 @@ test("2.3 maxTotalDose appears only on the Activase entry, cited with the label 
   assert.equal(withMax[0].id, "J2997");
   assert.deepEqual(withMax[0].x.maxTotalDose!.value, { amount: 90, unit: "mg" });
   assert.match(withMax[0].x.maxTotalDose!.cite.quote, /not to exceed 90 mg total dose/);
+});
+
+// --- Stage 3 Part A: indication-aware cap; optional amount billed ---
+
+const activase110 = (over: Partial<ClaimLine>) =>
+  check(
+    line({
+      hcpcs: "J2997", dose: { amount: 0.9, unit: "mg/kg" }, weightKg: 110,
+      unitsBilled: 90, jwUnitsBilled: 10, amountBilled: 5000, ...over,
+    }),
+    "J2997",
+  );
+const ADVISORY = "Label maximum depends on indication (Acute Ischemic Stroke: 90 mg). Select the indication from the record.";
+
+test("3A J2997 0.9 mg/kg, 110 kg, no indication: 99 mg, not capped, advisory present and cited", () => {
+  const { get } = activase110({});
+  assert.equal(get("dose").values.doseAmount, 99);
+  assert.equal(get("dose").values.capped, false);
+  assert.equal(get("dose_advisory").status, "advisory");
+  assert.equal(get("dose_advisory").message, ADVISORY);
+  assert.ok(get("dose_advisory").citations.some((c) => /not to exceed 90 mg/.test(c.quote)));
+});
+
+test("3A J2997 0.9 mg/kg, 110 kg, indication 'other': not capped, advisory present", () => {
+  const { get } = activase110({ indicationId: "other" });
+  assert.equal(get("dose").values.doseAmount, 99);
+  assert.equal(get("dose_advisory").message, ADVISORY);
+});
+
+test("3A J2997 0.9 mg/kg, 70 kg, no indication: 63 mg, no advisory", () => {
+  const { results, get } = check(
+    line({ hcpcs: "J2997", dose: { amount: 0.9, unit: "mg/kg" }, weightKg: 70, unitsBilled: 63, jwUnitsBilled: 37 }),
+    "J2997",
+  );
+  assert.equal(get("dose").values.doseAmount, 63);
+  assert.ok(!results.some((r) => r.id === "dose_advisory"));
+});
+
+test("3A capped line under acute_ischemic_stroke has no advisory", () => {
+  const { results } = activase110({ indicationId: "acute_ischemic_stroke" });
+  assert.ok(!results.some((r) => r.id === "dose_advisory"));
+});
+
+test("3A an indication id that is not on the drug: needs info", () => {
+  const { get } = activase110({ indicationId: "rheumatoid_arthritis" });
+  assert.equal(get("dose").status, "needs_info");
+});
+
+test("3A every dosing entry has a non-empty id, unique within its drug", () => {
+  for (const d of drugs) {
+    const ids = d.dosing.map((x) => x.id);
+    assert.ok(ids.every((id) => typeof id === "string" && id !== "" && id !== "other"), `${d.id}: bad dosing id`);
+    assert.equal(new Set(ids).size, ids.length, `${d.id}: duplicate dosing id`);
+  }
+});
+
+test("validateDrugs: a dosing entry id needs no citation, but must be a string", () => {
+  const ok: Record<string, unknown> = validDrug();
+  ok.dosing = [{ id: "x", indication: { value: "X", cite: labelCite } }];
+  assert.deepEqual(validateDrugs({ drugs: [ok] }, cms, sources), []);
+  const bad: Record<string, unknown> = validDrug();
+  bad.dosing = [{ id: 7, indication: { value: "X", cite: labelCite } }];
+  assert.equal(validateDrugs({ drugs: [bad] }, cms, sources).length, 1);
+});
+
+const case3NoAmount = (over: Partial<ClaimLine>) =>
+  check(
+    line({
+      hcpcs: "J1745", dose: { amount: 5, unit: "mg/kg" }, weightKg: 80, unitsBilled: 50,
+      amountBilled: undefined, ...over,
+    }),
+    "J1745",
+  );
+
+test("3A amount billed blank: benchmark needs info; ASP dollars still compute", () => {
+  const { get } = case3NoAmount({});
+  assert.equal(get("benchmark").status, "needs_info");
+  assert.equal(get("units").values.excess, 10);
+  assert.equal(money(get("dollars").values.amount), "298.56");
+});
+
+test("3A amount billed blank: charge-based dollars need info; DRG still $0", () => {
+  for (const contractType of ["percent_of_charges", "stoploss_outlier_carveout", "reference_based"] as const)
+    assert.equal(case3NoAmount({ contractType, chargesContractPercent: 50 }).get("dollars").status, "needs_info");
+  assert.equal(case3NoAmount({ contractType: "inpatient_drg" }).get("dollars").values.amount, 0);
 });
 
 if (failed) {

@@ -15,8 +15,9 @@ export type ClaimLine = {
   unitsBilled: number; // administered line
   jwUnitsBilled: number; // 0 if no JW line
   jzReported: boolean;
-  amountBilled: number; // total $ for the drug on this claim
+  amountBilled?: number; // total $ for the drug on this claim; blank gives needs info where charges are used
   dose: { amount: number; unit: DoseUnit };
+  indicationId?: string; // a dosing entry id of the confirmed drug, or "other"
   weightKg?: number;
   bsaM2?: number; // typed from the record, never calculated
   vialsUsed?: number[];
@@ -46,6 +47,7 @@ export type Drug = {
   vialSizes: Cited<{ amount: number; unit: string; ndcs: string[] }>[];
   singleDose: Cited<boolean>;
   dosing: {
+    id: string;
     indication: Cited<string>;
     dose: Cited<{ amount: number; unit: string }>;
     maxTotalDose?: Cited<{ amount: number; unit: string }>;
@@ -68,7 +70,7 @@ export type MatchResult =
 export type CheckStatus = "pass" | "flag" | "advisory" | "needs_info" | "info" | "not_applicable";
 
 export type CheckResult = {
-  id: "dose" | "vials" | "vial_advisory" | "units" | "jw_jz" | "benchmark" | "dollars";
+  id: "dose" | "dose_advisory" | "vials" | "vial_advisory" | "units" | "jw_jz" | "benchmark" | "dollars";
   status: CheckStatus;
   message: string;
   values: Record<string, number | string | boolean | number[]>;

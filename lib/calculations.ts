@@ -746,7 +746,7 @@ export function calculate340BImpact(
   const cascadeResults = calculate(moduleInputs);
 
   // 340B ceiling = AMP − URA, which equals price340B in cascade output
-  // (per 42 CFR 447.505: URA = max(AMP×0.231, AMP−BestPrice))
+  // (per 42 CFR 447.509(a)(1): URA = max(AMP×0.231, AMP−BestPrice))
   const ceiling340B = cascadeResults.price340B;
   const totalVolume = cascadeResults.totalVolume;
 

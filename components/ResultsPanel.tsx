@@ -141,7 +141,7 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
                   { name: "Commercial Net Price", value: usd2.format(commercialNetPrice) },
                   { name: "Current Best Price", value: usd2.format(currentBestPrice) },
                 ]}
-                citation="42 USC 1396r-8(c)(1)(C) — Best Price statutory definition"
+                citation="42 USC 1396r-8(c)(1)(C): Best Price statutory definition"
               />
             </div>
             <p className="text-sm text-ink mt-0.5">
@@ -178,7 +178,7 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
                 { name: "WAC", value: usd2.format(wac) },
                 { name: "Commercial Rebate %", value: `${commercialRebatePct.toFixed(1)}%` },
               ]}
-              citation="42 CFR 447.505(c) — commercial pricing methodology"
+              citation="42 CFR 447.505(b): Best Price includes discounts and rebates to the eligible entities in 447.505(a)"
             />
           }
         />
@@ -192,7 +192,7 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
                 { name: "AMP", value: usd2.format(amp) },
                 { name: "Current Best Price", value: usd2.format(currentBestPrice) },
               ]}
-              citation="42 CFR 447.505 — Unit Rebate Amount calculation"
+              citation="42 CFR 447.509(a)(1): basic rebate is the greater of AMP minus Best Price or 23.1% of AMP"
             />
           }
         />
@@ -215,7 +215,7 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
                   ? { name: "New Best Price (Commercial Net)", value: usd2.format(commercialNetPrice) }
                   : { name: "New Best Price (Current Best Price)", value: usd2.format(results.newBestPrice) },
               ]}
-              citation="42 CFR 447.505 — Unit Rebate Amount calculation, post-cascade"
+              citation="42 CFR 447.509(a)(1): basic rebate is the greater of AMP minus Best Price or 23.1% of AMP"
             />
           }
         />
@@ -232,7 +232,7 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
                 { name: "Old URA", value: usd2.format(oldMedicaidRebatePerUnit) },
                 { name: "Medicaid Volume", value: num.format(medicaidVolume) },
               ]}
-              citation="Derived from 42 CFR 447.505"
+              citation="Derived from 42 CFR 447.509(a)(1)"
               inverted
             />
           }

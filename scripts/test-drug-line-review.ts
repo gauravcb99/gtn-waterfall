@@ -263,7 +263,7 @@ test("case 8: J9312 375 mg/m2, BSA 1.8: 675 mg, 500+100+100, fractional JW needs
   assert.equal(ok.get("vials").values.maxValidUnits, 70);
   assert.equal(ok.get("units").status, "pass");
   assert.equal(ok.get("jw_jz").status, "needs_info");
-  assert.match(ok.get("jw_jz").message, /fractional unit split, rounding rule not modeled/);
+  assert.equal(ok.get("jw_jz").message, "Fractional unit split: 67.5 administered and 2.5 wasted units. The rule for rounding a JW split isn't modeled, so the JW unit count can't be checked.");
   assert.equal(ok.get("jw_jz").values.administeredUnits, 67.5);
   assert.equal(ok.get("jw_jz").values.wasteUnits, 2.5);
   const over = check(line({ ...base, unitsBilled: 78, jwUnitsBilled: 2 }), "J9312");
@@ -680,7 +680,7 @@ test("3.2 example case 8: BSA-based dose, three vials, fractional JW, benchmark 
   pin(get("dose"), "Dose: 675 mg = 67.5 billing units (10 mg each)", "375 mg/m2 × 1.8 m2 = 675 mg; 675 mg ÷ 10 mg = 67.5 billing units");
   pin(get("vials"), "Drew 700 mg from 3 vials (500 + 100 + 100), 25 mg wasted (2.5 billing units) (assumed: least-waste combination)",
     "500 + 100 + 100 = 700 mg drawn; 700 mg − 675 mg = 25 mg waste; 700 mg ÷ 10 mg = 70 valid billing units");
-  pin(get("jw_jz"), "needs info: fractional unit split, rounding rule not modeled (administered 67.5, waste 2.5 units)");
+  pin(get("jw_jz"), "Fractional unit split: 67.5 administered and 2.5 wasted units. The rule for rounding a JW split isn't modeled, so the JW unit count can't be checked.");
   pin(get("benchmark"), "Billed $342.86 per unit, 4.76x the October 2026 CMS payment limit ($72.094 per unit)",
     "$24,000.00 ÷ 70 units = $342.86 per unit; $342.86 ÷ $72.094 = 4.76x; 70 units × $72.094 = $5,046.58");
 });
@@ -698,11 +698,11 @@ test("3.2 stop-loss dollars wording keeps the full-precision payment limit", () 
     "10 excess units × $200.00 billed per unit = $2,000.00; 10 excess units × $29.856 = $298.56");
 });
 
-test("3.2 dollars needs info carries the 'needs info:' prefix", () => {
+test("3.2 dollars needs info is a plain sentence (4a: no 'needs info:' prefix)", () => {
   const { get } = example(2, { contractType: "percent_of_charges", chargesContractPercent: "50" }, { amountBilled: "" });
-  pin(get("dollars"), "needs info: billed per unit is unavailable (amount billed blank or no units billed)");
+  pin(get("dollars"), "The billed price per unit is unavailable, because the amount billed is blank or no units are billed.");
   const noPct = example(0, { aspContractPercent: "" });
-  pin(noPct.get("dollars"), "needs info: aspContractPercent is required for an ASP fee schedule contract");
+  pin(noPct.get("dollars"), "The % of CMS payment limit is missing. It is required for an ASP fee schedule contract.");
 });
 
 test("3.2 documented vial that does not cover the dose: wording", () => {
@@ -726,6 +726,82 @@ test("3.2 page summary for case 1 and case 2", () => {
   const two = example(1);
   assert.equal(summarize({ line: two.line, results: two.results }),
     "No flags. 1 advisory: a 100-unit vial would have avoided the waste.");
+});
+
+// --- Stage 4a: needs-info messages are plain sentences, and the summary gives a reason for each ---
+
+const needsInfoRuns = () => [
+  example(0), example(1), example(2), example(3), example(4),
+  example(2, { weightKg: "" }), // no weight
+  example(4, { bsaM2: "" }), // no BSA
+  example(0, { vials: "300" }), // vial size not on the label
+  example(0, { doseAmount: "200" }), // vials do not cover the dose
+  example(2, { contractType: "percent_of_charges", chargesContractPercent: "50" }, { amountBilled: "" }),
+  example(2, { contractType: "percent_of_charges" }),
+  example(0, { aspContractPercent: "" }),
+  example(3, { weightKg: "110", indicationId: "not_on_label" }),
+  { ...check(line({ hcpcs: "J0585", dose: { amount: 100, unit: "mg" }, unitsBilled: 100 }), "J0585"), line: undefined },
+  { ...check(line({ hcpcs: "J0585", dose: { amount: 100, unit: "units" }, vialsUsed: [100] }), "J0585"), line: undefined },
+];
+
+test("4a every needs-info message is a capitalized sentence without the 'needs info' prefix", () => {
+  let seen = 0;
+  for (const { results } of needsInfoRuns())
+    for (const r of results.filter((x) => x.status === "needs_info")) {
+      seen++;
+      assert.doesNotMatch(r.message, /needs info/i, `${r.id}: ${r.message}`);
+      assert.match(r.message, /^[A-Z%]/, `${r.id} does not start with a capital: ${r.message}`);
+    }
+  assert.ok(seen >= 20, `only ${seen} needs-info results exercised`);
+});
+
+test("4a every needs-info result carries a summary reason, or waits on the dose", () => {
+  for (const { results } of needsInfoRuns())
+    for (const r of results.filter((x) => x.status === "needs_info"))
+      assert.ok((r.summary && r.summary.trim() !== "") || r.waitsOn === "dose", `${r.id} (needs_info) has no summary reason`);
+});
+
+test("4a case 8 summary gives the reason for the needs-info result", () => {
+  const eight = example(4);
+  assert.equal(summarize({ line: eight.line, results: eight.results }),
+    "No flags. 1 needs info: the JW unit count, because the dose works out to 67.5 units.");
+});
+
+test("4a needs-info wording: missing weight, the checks that depend on the dose, and the summary", () => {
+  const { get, line: l, results } = example(2, { weightKg: "" });
+  pin(get("dose"), "A weight in kg is required for a mg/kg dose.");
+  pin(get("units"), "This check needs the dose. A weight in kg is required for a mg/kg dose.");
+  assert.equal(summarize({ line: l, results }),
+    "No flags. 5 needs info: the dose, because the weight is missing; 4 checks wait on the dose.");
+});
+
+test("4a checks that wait on the dose are marked structurally, and only those", () => {
+  const { results } = example(2, { weightKg: "" });
+  assert.deepEqual(results.filter((r) => r.waitsOn === "dose").map((r) => r.id), ["vials", "units", "jw_jz", "dollars"]);
+  for (const { results: rs } of needsInfoRuns())
+    for (const r of rs.filter((x) => x.waitsOn === "dose")) assert.equal(rs.find((x) => x.id === "dose")?.status, "needs_info");
+});
+
+test("4a needs-info wording: blank amount billed under percent of charges, and the summary", () => {
+  const { get, line: l, results } = example(2, { contractType: "percent_of_charges", chargesContractPercent: "50" }, { amountBilled: "" });
+  pin(get("benchmark"), "The amount billed is blank, so the billed price per unit can't be compared with the CMS payment limit.");
+  assert.equal(summarize({ line: l, results }),
+    "2 flags: 10 excess units (dollars at stake need info); JZ expected but not reported. " +
+      "2 needs info: the benchmark, because the amount billed is blank; dollars at stake, because the amount billed is blank or no units are billed.");
+});
+
+test("4a needs-info wording: vial size not on the label, and the summary", () => {
+  const { get, line: l, results } = example(0, { vials: "300" });
+  pin(get("units"), "A documented vial size is not on the label, so the waste can't be worked out.");
+  assert.equal(summarize({ line: l, results }),
+    "1 flag: a documented vial size is not on the label. 3 needs info: units billed, because a documented vial size is not on the label; " +
+      "the JW / JZ modifiers, because a documented vial size is not on the label; dollars at stake, because a documented vial size is not on the label.");
+});
+
+test("4a needs-info wording: JW/JZ when the documented vials do not cover the dose", () => {
+  const { get } = example(0, { doseAmount: "200" });
+  pin(get("jw_jz"), "The documented vials do not cover the documented dose, so the expected modifier can't be determined.");
+  assert.equal(get("jw_jz").summary, "the JW / JZ modifiers, because the documented vials do not cover the dose");
 });
 
 if (failed) {

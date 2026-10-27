@@ -6,6 +6,8 @@ import { billingUnits, limitText, plural, units, usd, vocab } from "./wording";
 
 const JW_JZ_LABEL = "Medicare Part B requirement (CMS JW/JZ FAQ); commercial payer rules vary.";
 const sum = (xs: number[]) => round4(xs.reduce((a, b) => a + b, 0));
+// What a needs-info result could not check, as it reads in the page summary.
+const SUBJECT = { units: "units billed", jw_jz: "the JW / JZ modifiers", dollars: "dollars at stake" };
 
 // Runs every check on one claim drug line. Requires a drug id the user confirmed from matchLine.
 export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined | null): ChecksOutcome {
@@ -43,16 +45,28 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
   } else {
     benchmark = {
       id: "benchmark", status: "needs_info", citations: [cmsCite], values: {},
-      message: totalBilled > 0 ? "needs info: amount billed is blank" : "needs info: no units billed",
+      ...(totalBilled > 0
+        ? {
+            message: "The amount billed is blank, so the billed price per unit can't be compared with the CMS payment limit.",
+            summary: "the benchmark, because the amount billed is blank",
+          }
+        : {
+            message: "No units are billed, so there is no billed price per unit to compare with the CMS payment limit.",
+            summary: "the benchmark, because no units are billed",
+          }),
     };
   }
 
   // Dose.
   const dose = computeDose(line, drug);
   if (!dose.ok) {
-    results.push({ id: "dose", status: "needs_info", message: `needs info: ${dose.reason}`, values: {}, citations: [buCite] });
+    results.push({
+      id: "dose", status: "needs_info", message: dose.reason, summary: `the dose, because ${dose.cause}`, values: {}, citations: [buCite],
+    });
     for (const id of ["vials", "units", "jw_jz", "dollars"] as const)
-      results.push({ id, status: "needs_info", message: `needs info: requires the dose (${dose.reason})`, values: {}, citations: [buCite] });
+      results.push({
+        id, status: "needs_info", message: `This check needs the dose. ${dose.reason}`, waitsOn: "dose", values: {}, citations: [buCite],
+      });
     results.push(benchmark);
     return { status: "ran", drugId: drug.id, results };
   }
@@ -80,9 +94,11 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
       summary: "a documented vial size is not on the label",
       values: { vials, basis: "documented" },
     });
-    const reason = "needs info: documented vial size is not on the label, so waste cannot be determined";
     for (const id of ["units", "jw_jz", "dollars"] as const)
-      results.push({ id, status: "needs_info", message: reason, values: {}, citations: vialCites });
+      results.push({
+        id, status: "needs_info", message: "A documented vial size is not on the label, so the waste can't be worked out.",
+        summary: `${SUBJECT[id]}, because a documented vial size is not on the label`, values: {}, citations: vialCites,
+      });
     results.push(benchmark);
     return { status: "ran", drugId: drug.id, results };
   }
@@ -154,14 +170,19 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
   if (!drug.singleDose.value) {
     results.push(jw("not_applicable", "not a single-dose container", "none"));
   } else if (!covers) {
-    results.push(jw("needs_info", "needs info: documented vials do not cover documented dose", "unknown"));
+    results.push(jw("needs_info", "The documented vials do not cover the documented dose, so the expected modifier can't be determined.",
+      "unknown", `${SUBJECT.jw_jz}, because the documented vials do not cover the dose`));
   } else if (line.jzReported && jwUnits > 0) {
     results.push(jw("flag", "JZ attests no discarded amount, but a JW line is billed.", waste > 0 ? "JW" : "JZ",
       "JZ reported together with a JW line"));
   } else if (waste > 0) {
-    if (!Number.isInteger(dose.doseUnits) || !Number.isInteger(wasteUnits))
-      results.push(jw("needs_info", `needs info: fractional unit split, rounding rule not modeled (administered ${dose.doseUnits}, waste ${wasteUnits} units)`, "JW"));
-    else if (jwUnits === 0)
+    if (!Number.isInteger(dose.doseUnits) || !Number.isInteger(wasteUnits)) {
+      const why = Number.isInteger(dose.doseUnits) ? `the waste works out to ${units(wasteUnits)}` : `the dose works out to ${units(dose.doseUnits)}`;
+      results.push(jw("needs_info",
+        `Fractional unit split: ${dose.doseUnits} administered and ${wasteUnits} wasted units. ` +
+          "The rule for rounding a JW split isn't modeled, so the JW unit count can't be checked.",
+        "JW", `the JW unit count, because ${why}`));
+    } else if (jwUnits === 0)
       results.push(jw("flag", `${units(wasteUnits)} wasted, so a JW line is expected, but none was billed`, "JW", "JW expected but not billed"));
     else if (jwUnits > wasteUnits)
       results.push(jw("flag", `The JW line bills ${units(jwUnits)}, more than the ${units(wasteUnits)} wasted`, "JW", "JW units exceed the waste"));

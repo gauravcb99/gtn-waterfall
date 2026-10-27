@@ -93,6 +93,11 @@ export function summarize(ctx: Ctx): string {
   ];
   if (advisories.length)
     parts.push(`${advisories.length} ${plural(advisories.length, "advisory", "advisories")}: ${advisories.map(phrase).join("; ")}.`);
-  if (needs.length) parts.push(`${needs.length} needs info: ${needs.map((r) => TITLES[r.id]).join(", ")}.`);
+  if (needs.length) {
+    const waiting = needs.filter((r) => r.waitsOn === "dose").length;
+    const reasons = needs.filter((r) => r.waitsOn !== "dose").map((r) => r.summary ?? TITLES[r.id]);
+    if (waiting) reasons.push(`${waiting} ${plural(waiting, "check waits", "checks wait")} on the dose`);
+    parts.push(`${needs.length} needs info: ${reasons.join("; ")}.`);
+  }
   return parts.join(" ");
 }

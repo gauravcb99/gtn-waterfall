@@ -13,13 +13,22 @@ export function dollarsAtStake(
   citations: Citation[],
 ): CheckResult {
   const base = { id: "dollars" as const, label: LABEL, citations };
-  const needs = (reason: string): CheckResult => ({ ...base, status: "needs_info", message: `needs info: ${reason}`, values: {} });
-  const noRate = "billed per unit is unavailable (amount billed blank or no units billed)";
+  // message: full sentence for the card; cause: short clause for the page summary.
+  const needs = (message: string, cause: string): CheckResult => ({
+    ...base, status: "needs_info", message, summary: `dollars at stake, because ${cause}`, values: {},
+  });
+  const noRate = () =>
+    needs(
+      "The billed price per unit is unavailable, because the amount billed is blank or no units are billed.",
+      "the amount billed is blank or no units are billed",
+    );
 
   switch (line.contractType) {
     case "asp_fee_schedule": {
       const pct = line.aspContractPercent;
-      if (pct === undefined) return needs("aspContractPercent is required for an ASP fee schedule contract");
+      if (pct === undefined)
+        return needs("The % of CMS payment limit is missing. It is required for an ASP fee schedule contract.",
+          "the % of CMS payment limit is missing");
       const amount = round4((excess * limit * pct) / 100);
       return {
         ...base, status: "info", values: { amount },
@@ -29,8 +38,10 @@ export function dollarsAtStake(
     }
     case "percent_of_charges": {
       const pct = line.chargesContractPercent;
-      if (pct === undefined) return needs("chargesContractPercent is required for a percent of charges contract");
-      if (billedPerUnit === undefined) return needs(noRate);
+      if (pct === undefined)
+        return needs("The % of billed charges is missing. It is required for a percent of charges contract.",
+          "the % of billed charges is missing");
+      if (billedPerUnit === undefined) return noRate();
       const amount = round4((excess * billedPerUnit * pct) / 100);
       return {
         ...base, status: "info", values: { amount },
@@ -45,7 +56,7 @@ export function dollarsAtStake(
       };
     case "stoploss_outlier_carveout":
     case "reference_based": {
-      if (billedPerUnit === undefined) return needs(noRate);
+      if (billedPerUnit === undefined) return noRate();
       const amountAtBilledRate = round4(excess * billedPerUnit);
       const amountAtPaymentLimit = round4(excess * limit);
       return {

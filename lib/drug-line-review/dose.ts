@@ -12,7 +12,7 @@ export type DoseCalc =
       cap?: { text: string; cite: Citation };
       advisory?: { text: string; summary: string; cites: Citation[] };
     }
-  | { ok: false; reason: string };
+  | { ok: false; reason: string; cause: string }; // reason: full sentence; cause: short clause for the summary
 
 // Converts the documented dose into the drug's billing measure (e.g. mg) and billing units.
 export function computeDose(line: ClaimLine, drug: Drug): DoseCalc {
@@ -20,20 +20,28 @@ export function computeDose(line: ClaimLine, drug: Drug): DoseCalc {
   const bu = drug.billingUnit.value;
   const wanted = unit === "units" ? "UNIT" : "MG";
   if (measure(bu.unit) !== wanted)
-    return { ok: false, reason: `dose unit "${unit}" does not match the billing unit ${drug.billingUnitRaw.value}` };
-  if (!(amount > 0)) return { ok: false, reason: "documented dose amount missing" };
+    return {
+      ok: false, cause: "the dose unit does not match the billing unit",
+      reason: `The dose unit "${unit}" does not match the billing unit (${drug.billingUnitRaw.value}).`,
+    };
+  if (!(amount > 0)) return { ok: false, reason: "The documented dose amount is missing.", cause: "the dose amount is missing" };
   const selected = line.indicationId && line.indicationId !== "other" ? line.indicationId : undefined;
   const entry = selected ? drug.dosing.find((x) => x.id === selected) : undefined;
-  if (selected && !entry) return { ok: false, reason: `indication "${selected}" is not a dosing entry for ${drug.id}` };
+  if (selected && !entry)
+    return {
+      ok: false, cause: "the indication is not a dosing entry for this drug",
+      reason: `The indication "${selected}" is not a dosing entry for ${drug.id}.`,
+    };
 
   let doseAmount: number;
   const steps: string[] = [];
   if (unit === "mg/kg") {
-    if (!(line.weightKg! > 0)) return { ok: false, reason: "weight (kg) is required for a mg/kg dose" };
+    if (!(line.weightKg! > 0)) return { ok: false, reason: "A weight in kg is required for a mg/kg dose.", cause: "the weight is missing" };
     doseAmount = round4(amount * line.weightKg!);
     steps.push(`${amount} mg/kg × ${line.weightKg} kg = ${doseAmount} mg`);
   } else if (unit === "mg/m2") {
-    if (!(line.bsaM2! > 0)) return { ok: false, reason: "BSA (m2) from the record is required for a mg/m2 dose" };
+    if (!(line.bsaM2! > 0))
+      return { ok: false, reason: "A BSA in m2 from the record is required for a mg/m2 dose.", cause: "the BSA is missing" };
     doseAmount = round4(amount * line.bsaM2!);
     steps.push(`${amount} mg/m2 × ${line.bsaM2} m2 = ${doseAmount} mg`);
   } else {
@@ -48,7 +56,10 @@ export function computeDose(line: ClaimLine, drug: Drug): DoseCalc {
     const withMax = (entry ? [entry] : drug.dosing).filter((x) => x.maxTotalDose);
     const bad = withMax.find((x) => measure(x.maxTotalDose!.value.unit) !== measure(bu.unit));
     if (bad)
-      return { ok: false, reason: `label maximum unit "${bad.maxTotalDose!.value.unit}" does not match the billing unit ${drug.billingUnitRaw.value}` };
+      return {
+        ok: false, cause: "the label maximum unit does not match the billing unit",
+        reason: `The label maximum unit "${bad.maxTotalDose!.value.unit}" does not match the billing unit (${drug.billingUnitRaw.value}).`,
+      };
     const exceeded = withMax.filter((x) => doseAmount > x.maxTotalDose!.value.amount);
     const text = (x: (typeof exceeded)[number]) => `${x.maxTotalDose!.value.amount} ${x.maxTotalDose!.value.unit}`;
     if (entry && exceeded.length) {

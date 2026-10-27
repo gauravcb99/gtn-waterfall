@@ -259,7 +259,7 @@ export default function IRAImpactScenario({
             {/* Price Applicability Year */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold uppercase tracking-wide text-[#0A4747]">
-                Price Applicability Year
+                Initial Price Applicability Year
               </label>
               <input
                 type="number"
@@ -401,7 +401,7 @@ export default function IRAImpactScenario({
                   inputs={[
                     { name: "Applicable Ceiling", value: ceilingLabel },
                     { name: "Years Since FDA Approval", value: String(parsedInputs.yearsOnMarket) },
-                    { name: "Price Applicability Year", value: String(parsedInputs.ipay) },
+                    { name: "Initial Price Applicability Year", value: String(parsedInputs.ipay) },
                     { name: "Non-Federal AMP", value: usd2.format(parsedInputs.nonFederalAMP) },
                   ]}
                   citation="IRA Section 11001; SSA §1194(c)(3)-(5), 42 USC 1320f-3(c)(3)-(5): Maximum Fair Price ceiling"
@@ -624,7 +624,7 @@ export default function IRAImpactScenario({
                 <p>The Non-Federal AMP above sets the negotiated price ceiling; Medicaid rebates use the Medicaid AMP.</p>
               )}
               <p>
-                Applies only while the negotiated price is in effect, from the price applicability year ({parsedInputs.ipay}).
+                Applies only while the negotiated price is in effect, from the initial price applicability year ({parsedInputs.ipay}).
               </p>
             </div>
           </div>

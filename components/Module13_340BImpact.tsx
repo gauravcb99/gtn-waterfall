@@ -578,7 +578,7 @@ export default function Module13_340BImpact({ inputs, results }: Module13Props) 
       <p className="text-xs text-gray-400 text-center pb-1">
         340B Ceiling Price per{" "}
         <span className="font-medium">42 USC §256b(a)(1)</span>. URA per{" "}
-        <span className="font-medium">42 CFR 447.505</span>.
+        <span className="font-medium">42 CFR 447.509(a)(1)</span>.
         Elasticity model is illustrative; not a legal or regulatory determination.
       </p>
     </div>

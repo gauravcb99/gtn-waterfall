@@ -276,6 +276,9 @@ export default function StrategicScenarioComparison({
     leader: cumA[i] > cumB[i] ? "A" : cumA[i] < cumB[i] ? "B" : "—",
   }));
 
+  // ── PBM formulary rebate: excluded from Best Price, so there is no trigger to avoid ──
+  const pbmExcluded = inputs.concessionRecipient === "pbm_formulary";
+
   // ── Edge case: safe ceiling not meaningful ─────────────────────────────────
   const noSafeCeiling =
     safeCeiling <= 0 &&
@@ -286,7 +289,7 @@ export default function StrategicScenarioComparison({
     const totalMedExp = usdFull.format(cumMedicaidA);
     const diff = usdFull.format(Math.abs(totalCumA - totalCumB));
     if (winner === "TIE") {
-      return `The two scenarios produce nearly identical outcomes over ${N} years (within 2% cumulative difference). The decision should be based on non-financial factors such as competitive positioning, long-term PBM relationship value, and pipeline considerations.`;
+      return `The two scenarios produce nearly identical outcomes over ${N} years (within 2% cumulative difference). The decision should be based on non-financial factors such as competitive positioning, the long-term value of the contracting relationship, and pipeline considerations.`;
     }
     if (winner === "A") {
       const paybackClause =
@@ -295,7 +298,7 @@ export default function StrategicScenarioComparison({
           : "";
       return `At the current pricing and volume assumptions, accepting the cascade and protecting formulary position is the stronger long-term strategy. The front-loaded Medicaid penalty of ${usdFull.format(aYears[Math.min(1, N)].incrementalMedicaidExposure)} diminishes each year as AMP rises, while the commercial volume protection generates compounding revenue growth.${paybackClause} Accepting the cascade generates ${diff} more in cumulative net revenue over ${N} years despite ${totalMedExp} in incremental Medicaid costs.`;
     }
-    return `At the current pricing and volume assumptions, avoiding the cascade produces better financial outcomes. Staying below the ${safeCeiling}% safe ceiling generates ${diff} more in cumulative net revenue over ${N} years. The commercial volume loss from a weaker formulary position is not large enough to offset the cumulative Medicaid exposure from the cascade. Consider renegotiating the PBM contract at or below the ${safeCeiling}% safe ceiling.`;
+    return `At the current pricing and volume assumptions, avoiding the cascade produces better financial outcomes. Staying below the ${safeCeiling}% safe ceiling generates ${diff} more in cumulative net revenue over ${N} years. The commercial volume loss from a weaker formulary position is not large enough to offset the cumulative Medicaid exposure from the cascade. Consider renegotiating the commercial contract at or below the ${safeCeiling}% safe ceiling.`;
   }, [winner, N, totalCumA, totalCumB, cumMedicaidA, aYears, paybackYear, safeCeiling]);
 
   return (
@@ -312,7 +315,9 @@ export default function StrategicScenarioComparison({
               Strategic Decision: Is the Cascade Worth It?
             </p>
             <p className="text-xs text-[#C9A86A] mt-0.5">
-              Scenario A (Accept Cascade) vs Scenario B (Stay Below Ceiling) — {N}-year cumulative comparison
+              {pbmExcluded
+                ? "Scenario A only: a PBM formulary rebate has no Best Price trigger to avoid"
+                : <>Scenario A (Accept Cascade) vs Scenario B (Stay Below Ceiling) — {N}-year cumulative comparison</>}
             </p>
           </div>
         </div>
@@ -321,7 +326,19 @@ export default function StrategicScenarioComparison({
         </span>
       </button>
 
-      {isOpen && (
+      {isOpen && pbmExcluded && (
+        <div className="p-6">
+          <div className="p-4 bg-[#0A4747]/5 border border-[#0A4747]/20 rounded-xl text-sm text-ink">
+            <p className="font-semibold text-[#0A4747]">No Best Price trigger to avoid.</p>
+            <p className="mt-1">
+              The concession is a PBM formulary rebate, which is excluded from Best Price under 42 CFR
+              447.505(c)(17). There is no rebate ceiling to stay below, so Scenario B is not run.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {isOpen && !pbmExcluded && (
         <div className="flex flex-col gap-6 p-6">
           {/* ── Safe Ceiling notice / edge case ──────────────────────── */}
           {noSafeCeiling && (

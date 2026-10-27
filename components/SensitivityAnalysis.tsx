@@ -123,6 +123,7 @@ export default function SensitivityAnalysis({ inputs }: SensitivityAnalysisProps
   // ── Derived status ────────────────────────────────────────────────────────
   const noCascadeEver = triggerRebate > 80;   // even 80% doesn't trigger
   const cascadeAlways = triggerRebate === 0;  // even 0% triggers
+  const pbmExcluded = inputs.concessionRecipient === "pbm_formulary"; // Best Price test does not run
 
   // ── Summary table rows ────────────────────────────────────────────────────
   const tableRows = useMemo(() => {
@@ -135,7 +136,9 @@ export default function SensitivityAnalysis({ inputs }: SensitivityAnalysisProps
   }, [chartData, triggerRebate, noCascadeEver, cascadeAlways]);
 
   // ── Collapsed badge text ──────────────────────────────────────────────────
-  const badgeText = cascadeAlways
+  const badgeText = pbmExcluded
+    ? "No Best Price trigger"
+    : cascadeAlways
     ? "No safe ceiling"
     : noCascadeEver
     ? "No cascade up to 80%"
@@ -195,6 +198,16 @@ export default function SensitivityAnalysis({ inputs }: SensitivityAnalysisProps
               <p className="text-sm font-semibold text-red-600 uppercase tracking-wide">
                 No safe ceiling exists — cascade triggers at all rebate levels
               </p>
+            ) : pbmExcluded ? (
+              <>
+                <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wide">
+                  No Best Price trigger
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  The concession is a PBM formulary rebate, which is excluded from Best Price under 42 CFR
+                  447.505(c)(17), so no rebate level triggers the cascade.
+                </p>
+              </>
             ) : noCascadeEver ? (
               <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wide">
                 No cascade triggered up to 80% rebate

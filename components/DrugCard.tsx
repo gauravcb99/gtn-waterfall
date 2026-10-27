@@ -30,7 +30,7 @@ interface DrugCardProps {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-type NumericKey = Exclude<keyof InputValues, "drugName">;
+type NumericKey = Exclude<keyof InputValues, "drugName" | "concessionRecipient">;
 const NUMERIC_KEYS: NumericKey[] = [
   "wac",
   "ampPercentage",

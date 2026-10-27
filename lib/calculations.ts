@@ -7,6 +7,9 @@ export interface InputValues {
   commercialVolume: number;
   medicaidVolume: number;
   volume340B: number;
+  // Who receives the commercial concession. Missing means a Best Price eligible customer.
+  // PBM rebates are excluded from Best Price under 42 CFR 447.505(c)(17), so "pbm_formulary" skips the test.
+  concessionRecipient?: "bp_eligible" | "pbm_formulary";
 }
 
 export interface CalculationResults {
@@ -424,8 +427,9 @@ export function calculate(inputs: InputValues): CalculationResults {
   const bestPriceDifferential = amp - currentBestPrice;
   const oldMedicaidRebatePerUnit = Math.max(standardMedicaidRebate, bestPriceDifferential);
 
-  // Best Price trigger
-  const bestPriceTriggered = commercialNetPrice < currentBestPrice;
+  // Best Price trigger (not tested when the concession is a PBM formulary rebate)
+  const bestPriceTriggered =
+    inputs.concessionRecipient !== "pbm_formulary" && commercialNetPrice < currentBestPrice;
   const newBestPrice = bestPriceTriggered ? commercialNetPrice : currentBestPrice;
 
   // New Medicaid rebate: MAX of statutory floor vs AMP-minus-new-BP

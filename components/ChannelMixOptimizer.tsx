@@ -586,7 +586,9 @@ export default function ChannelMixOptimizer({ inputs }: ChannelMixOptimizerProps
               .map((c) => c.name)
               .join(" and ");
             const topSentence = topNames.charAt(0).toUpperCase() + topNames.slice(1);
-            const cascadeClause = results.optimal.bestPriceTriggered
+            const cascadeClause = inputs.concessionRecipient === "pbm_formulary"
+              ? "the rebate is a PBM formulary rebate, which is excluded from Best Price under 42 CFR 447.505(c)(17), so it does not trigger the cascade."
+              : results.optimal.bestPriceTriggered
               ? "the Best Price cascade is triggered."
               : "the rebate is below the Best Price cascade threshold.";
             const mixDirectionText =

@@ -56,7 +56,7 @@ const inputClass =
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-type NumericKey = Exclude<keyof InputValues, "drugName">;
+type NumericKey = Exclude<keyof InputValues, "drugName" | "concessionRecipient">;
 const NUMERIC_KEYS: NumericKey[] = [
   "wac",
   "ampPercentage",
@@ -325,7 +325,7 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
             Drug Search
           </p>
           <p className="text-xs text-gray-500 mt-0.5">
-            Pull real pricing and volume data from CMS
+            Look up a drug's NADAC price per unit from CMS
           </p>
         </div>
 
@@ -463,7 +463,8 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
             </button>
 
             <p className="text-[10px] text-gray-400 leading-snug">
-              Data sourced from CMS NADAC and Medicare Part D Spending Dashboard.
+              Uses the CMS NADAC per-unit price (pharmacy acquisition cost) as a stand-in for WAC. If NADAC has
+              no match, only the name and NDC come from OpenFDA.
               Verify against your internal records before using in financial models.
             </p>
           </div>
@@ -571,6 +572,20 @@ export default function InputForm({ values, onChange, onCalculate }: InputFormPr
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-sm">%</span>
             </div>
           </div>
+        </Field>
+
+        <Field label="Concession paid to">
+          <select
+            className={inputClass}
+            value={values.concessionRecipient ?? "bp_eligible"}
+            onChange={(e) => {
+              internalChangeRef.current = true;
+              onChange({ ...values, concessionRecipient: e.target.value as InputValues["concessionRecipient"] });
+            }}
+          >
+            <option value="bp_eligible">Health plan, provider or other Best Price eligible customer</option>
+            <option value="pbm_formulary">PBM formulary rebate (excluded from Best Price)</option>
+          </select>
         </Field>
       </div>
 

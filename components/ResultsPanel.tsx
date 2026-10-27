@@ -96,11 +96,40 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
   const { commercialVolume, medicaidVolume, volume340B, currentBestPrice, wac } = inputs;
   const rebateIncreased = newMedicaidRebatePerUnit > oldMedicaidRebatePerUnit;
   const commercialRebatePct = wac > 0 ? (1 - commercialNetPrice / wac) * 100 : 0;
+  // A PBM formulary rebate is excluded from Best Price, so the test does not run.
+  const pbmExcluded = inputs.concessionRecipient === "pbm_formulary";
 
   return (
     <div className="flex flex-col gap-5">
       {/* Alert Banner */}
-      {bestPriceTriggered ? (
+      {pbmExcluded ? (
+        <div className="flex items-start gap-3 rounded-xl bg-[#0A4747]/8 border border-[#0A4747]/30 p-4">
+          <CheckCircle className="w-5 h-5 text-[#0A4747] shrink-0 mt-0.5" />
+          <div className="text-sm text-ink flex flex-col gap-1.5">
+            <div className="font-semibold text-[#0A4747] flex items-center gap-1.5">
+              Best Price test not run: PBM rebates are excluded from Best Price.
+              <AuditIcon
+                formula="Best Price test runs only when the concession is paid to a Best Price eligible customer"
+                inputs={[
+                  { name: "Concession paid to", value: "PBM formulary rebate" },
+                  { name: "Commercial Net Price", value: usd2.format(commercialNetPrice) },
+                  { name: "Current Best Price", value: usd2.format(currentBestPrice) },
+                ]}
+                citation="42 CFR 447.505(b): Best Price includes prices to the eligible entities in paragraph (a). 42 CFR 447.505(c)(17): PBM rebates are excluded, with two exceptions."
+              />
+            </div>
+            <p>
+              Under 42 CFR 447.505(c)(17), Best Price excludes &ldquo;PBM rebates, discounts, or other financial transactions except their mail order pharmacy&apos;s purchases or where such rebates, discounts, or other financial transactions are designed to adjust prices at the retail or provider level.&rdquo;
+            </p>
+            <p>
+              Best Price ({usd2.format(currentBestPrice)}), the Medicaid rebate per unit and the 340B ceiling stay at
+              their pre-deal values. Exceptions: if the concession covers the PBM&apos;s mail order pharmacy purchases, or
+              is designed to adjust prices at the retail or provider level, it counts toward Best Price. In that case,
+              choose &ldquo;Health plan, provider or other Best Price eligible customer&rdquo;.
+            </p>
+          </div>
+        </div>
+      ) : bestPriceTriggered ? (
         <div className="flex items-start gap-3 rounded-xl bg-[#C9A86A]/15 border border-[#C9A86A] p-4">
           <AlertTriangle className="w-5 h-5 text-[#C9A86A] shrink-0 mt-0.5" />
           <div>
@@ -173,10 +202,18 @@ export default function ResultsPanel({ results, inputs }: ResultsPanelProps) {
           showArrow={rebateIncreased}
           auditIcon={
             <AuditIcon
-              formula="New URA = max(AMP × 23.1%, AMP − New Best Price); New Best Price = Commercial Net Price"
+              formula={pbmExcluded
+                ? "New URA = max(AMP × 23.1%, AMP − Best Price); Best Price unchanged (PBM rebate excluded)"
+                : bestPriceTriggered
+                ? "New URA = max(AMP × 23.1%, AMP − New Best Price); New Best Price = Commercial Net Price"
+                : "New URA = max(AMP × 23.1%, AMP − New Best Price); New Best Price = Current Best Price (no trigger)"}
               inputs={[
                 { name: "AMP", value: usd2.format(amp) },
-                { name: "New Best Price (Commercial Net)", value: usd2.format(commercialNetPrice) },
+                pbmExcluded
+                  ? { name: "Best Price (unchanged)", value: usd2.format(results.newBestPrice) }
+                  : bestPriceTriggered
+                  ? { name: "New Best Price (Commercial Net)", value: usd2.format(commercialNetPrice) }
+                  : { name: "New Best Price (Current Best Price)", value: usd2.format(results.newBestPrice) },
               ]}
               citation="42 CFR 447.505 — Unit Rebate Amount calculation, post-cascade"
             />

@@ -221,6 +221,9 @@ export default function PortfolioView() {
           <p className="text-xs text-gray-500 mt-0.5">
             Search CMS NADAC data to pull real pricing, then set your proprietary inputs
           </p>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Portfolio drugs assume the concession goes to a Best Price eligible customer.
+          </p>
         </div>
 
         {/* Search bar */}

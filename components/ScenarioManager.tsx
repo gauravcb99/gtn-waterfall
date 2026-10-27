@@ -158,7 +158,17 @@ export default function ScenarioManager({
     },
     {
       label: "Commercial Rebate %",
-      render: (s) => `${s.inputs.commercialRebatePercentage}%`,
+      render: (s) =>
+        s.inputs.concessionRecipient === "pbm_formulary" ? (
+          <>
+            {`${s.inputs.commercialRebatePercentage}%`}{" "}
+            <span className="inline-block rounded-full bg-[#0A4747]/10 text-[#0A4747] text-[10px] font-semibold px-2 py-0.5">
+              PBM formulary rebate
+            </span>
+          </>
+        ) : (
+          `${s.inputs.commercialRebatePercentage}%`
+        ),
     },
     {
       label: "Commercial Net Price",
@@ -255,7 +265,7 @@ export default function ScenarioManager({
               if (limitWarning) setLimitWarning(false);
             }}
             onKeyDown={(e) => e.key === "Enter" && handleSave()}
-            placeholder="e.g., Aggressive PBM Deal"
+            placeholder="e.g., Aggressive commercial deal"
             className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-[#1A1A1A] focus:border-[#0A4747] focus:outline-none focus:ring-1 focus:ring-[#0A4747] transition-colors"
           />
           <button

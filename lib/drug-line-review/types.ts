@@ -77,6 +77,7 @@ export type CheckResult = {
   citations: Citation[];
   label?: string;
   formula?: string;
+  summary?: string; // short phrase for the results summary; set on every flag and advisory
 };
 
 export type ChecksOutcome =

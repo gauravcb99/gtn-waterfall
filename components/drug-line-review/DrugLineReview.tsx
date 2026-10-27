@@ -118,7 +118,7 @@ export default function DrugLineReview() {
               <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{ran.outcome.reason}</p>
             ) : (
               (() => {
-                const ctx = { drug, line: ran.line, results: ran.outcome.results };
+                const ctx = { line: ran.line, results: ran.outcome.results };
                 const results = ran.outcome.results;
                 const tone = results.some((r) => r.status === "flag")
                   ? "border-red-200 bg-red-50"

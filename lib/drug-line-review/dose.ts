@@ -1,4 +1,5 @@
 import { measure, round4 } from "./data";
+import { billingUnits, vocab } from "./wording";
 import type { Citation, ClaimLine, Drug } from "./types";
 
 export type DoseCalc =
@@ -6,9 +7,10 @@ export type DoseCalc =
       ok: true;
       doseAmount: number;
       doseUnits: number;
+      message: string;
       formula: string;
       cap?: { text: string; cite: Citation };
-      advisory?: { text: string; cites: Citation[] };
+      advisory?: { text: string; summary: string; cites: Citation[] };
     }
   | { ok: false; reason: string };
 
@@ -25,24 +27,23 @@ export function computeDose(line: ClaimLine, drug: Drug): DoseCalc {
   if (selected && !entry) return { ok: false, reason: `indication "${selected}" is not a dosing entry for ${drug.id}` };
 
   let doseAmount: number;
-  let formula: string;
+  const steps: string[] = [];
   if (unit === "mg/kg") {
     if (!(line.weightKg! > 0)) return { ok: false, reason: "weight (kg) is required for a mg/kg dose" };
     doseAmount = round4(amount * line.weightKg!);
-    formula = `${amount} mg/kg x ${line.weightKg} kg = ${doseAmount} mg`;
+    steps.push(`${amount} mg/kg × ${line.weightKg} kg = ${doseAmount} mg`);
   } else if (unit === "mg/m2") {
     if (!(line.bsaM2! > 0)) return { ok: false, reason: "BSA (m2) from the record is required for a mg/m2 dose" };
     doseAmount = round4(amount * line.bsaM2!);
-    formula = `${amount} mg/m2 x ${line.bsaM2} m2 = ${doseAmount} mg`;
+    steps.push(`${amount} mg/m2 × ${line.bsaM2} m2 = ${doseAmount} mg`);
   } else {
     doseAmount = amount;
-    formula = `${amount} ${unit}`;
   }
 
   // Label maximum total dose, for computed (weight- or BSA-based) doses only. It caps the dose only
   // when the selected indication's entry states one; with no indication, it becomes an advisory.
   let cap: { text: string; cite: Citation } | undefined;
-  let advisory: { text: string; cites: Citation[] } | undefined;
+  let advisory: { text: string; summary: string; cites: Citation[] } | undefined;
   if (unit === "mg/kg" || unit === "mg/m2") {
     const withMax = (entry ? [entry] : drug.dosing).filter((x) => x.maxTotalDose);
     const bad = withMax.find((x) => measure(x.maxTotalDose!.value.unit) !== measure(bu.unit));
@@ -53,20 +54,23 @@ export function computeDose(line: ClaimLine, drug: Drug): DoseCalc {
     if (entry && exceeded.length) {
       cap = { text: `capped at label maximum (${text(entry)})`, cite: entry.maxTotalDose!.cite };
       doseAmount = entry.maxTotalDose!.value.amount;
-      formula += `; ${cap.text}`;
+      steps.push(cap.text);
     } else if (!entry && exceeded.length) {
+      const which = exceeded.map((x) => `${x.indication.value}: ${text(x)}`).join("; ");
       advisory = {
-        text:
-          `Label maximum depends on indication (${exceeded.map((x) => `${x.indication.value}: ${text(x)}`).join("; ")}). ` +
-          "Select the indication from the record.",
+        text: `Label maximum depends on indication (${which}). Select the indication from the record.`,
+        summary: `label maximum depends on indication (${which}). Select the indication from the record`,
         cites: exceeded.map((x) => x.maxTotalDose!.cite),
       };
     }
   }
   const doseUnits = round4(doseAmount / bu.amount);
+  const { qty, buText } = vocab(drug);
+  steps.push(`${qty(doseAmount)} ÷ ${buText} = ${billingUnits(doseUnits)}`);
   return {
     ok: true, doseAmount, doseUnits, cap, advisory,
-    formula: `${formula}; / ${drug.billingUnitRaw.value} = ${doseUnits} units`,
+    message: `Dose: ${qty(doseAmount)} = ${billingUnits(doseUnits)} (${buText} each)${cap ? `, ${cap.text}` : ""}`,
+    formula: steps.join("; "),
   };
 }
 

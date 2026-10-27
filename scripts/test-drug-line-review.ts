@@ -4,6 +4,9 @@ import { parseCsv, validateDrugs } from "./build-drug-line-data";
 import { EXCLUDED_PRODUCTS, matchLine } from "../lib/drug-line-review/match";
 import cmsJson from "../data/drug-line-review/cms-asp-oct-2026.json";
 import { drugs } from "../lib/drug-line-review/data";
+import { EXAMPLES } from "../components/drug-line-review/examples";
+import { toClaimLine, type ClaimFormState, type RecordFormState } from "../components/drug-line-review/forms";
+import { summarize } from "../components/drug-line-review/display";
 import { runChecks } from "../lib/drug-line-review/checks";
 import type { CheckResult, ClaimLine } from "../lib/drug-line-review/types";
 
@@ -344,7 +347,7 @@ test("documented vials that do not cover the dose are flagged", () => {
     "J0585",
   );
   assert.equal(get("vials").status, "flag");
-  assert.match(get("vials").message, /documented vials do not cover documented dose/);
+  assert.equal(get("vials").message, "The documented vial (100 units) does not cover the documented dose (200 units)");
 });
 
 test("asp_fee_schedule without aspContractPercent: needs info", () => {
@@ -612,6 +615,117 @@ test("3A amount billed blank: charge-based dollars need info; DRG still $0", () 
   for (const contractType of ["percent_of_charges", "stoploss_outlier_carveout", "reference_based"] as const)
     assert.equal(case3NoAmount({ contractType, chargesContractPercent: 50 }).get("dollars").status, "needs_info");
   assert.equal(case3NoAmount({ contractType: "inpatient_drg" }).get("dollars").values.amount, 0);
+});
+
+// --- Stage 3.2: wording pinned in lib (built from the page's own examples) ---
+
+const EXAMPLE_IDS = ["J0585", "J0585", "J1745", "J2997", "J9312"];
+function example(i: number, record: Partial<RecordFormState> = {}, claim: Partial<ClaimFormState> = {}) {
+  const r = toClaimLine({ ...EXAMPLES[i].claim, ...claim }, { ...EXAMPLES[i].record, ...record });
+  if ("error" in r) throw new Error(r.error);
+  return { ...check(r.line, EXAMPLE_IDS[i]), line: r.line };
+}
+const pin = (r: CheckResult, message: string, formula?: string) => {
+  assert.equal(r.message, message);
+  if (formula !== undefined) assert.equal(r.formula, formula);
+};
+
+test("3.2 example case 1: dose, vials, units, JW/JZ, benchmark, dollars wording", () => {
+  const { get } = example(0);
+  pin(get("dose"), "Dose: 100 units = 100 billing units (1 unit each)", "100 units ÷ 1 unit = 100 billing units");
+  pin(get("vials"), "Drew 100 units from 1 vial, no waste",
+    "100 units drawn (1 vial); 100 units − 100 units = 0 units waste; 100 units ÷ 1 unit = 100 valid billing units");
+  pin(get("units"), "100 units billed above the 100 that the record supports",
+    "200 administered + 0 JW = 200 billed; 200 − 100 = 100 excess");
+  pin(get("jw_jz"), "No waste, so JZ is expected, but it was not reported");
+  pin(get("benchmark"), "Billed $25.00 per unit, 3.84x the October 2026 CMS payment limit ($6.514 per unit)",
+    "$5,000.00 ÷ 200 units = $25.00 per unit; $25.00 ÷ $6.514 = 3.84x; 200 units × $6.514 = $1,302.80");
+  pin(get("dollars"), "$651.40 at stake at 100% of the CMS payment limit", "100 excess units × $6.514 × 100% = $651.40");
+});
+
+test("3.2 example case 2: vials, vial advisory, units, JW wording", () => {
+  const { get } = example(1);
+  pin(get("vials"), "Drew 200 units from 1 vial, 100 units wasted (100 billing units)",
+    "200 units drawn (1 vial); 200 units − 100 units = 100 units waste; 200 units ÷ 1 unit = 200 valid billing units");
+  pin(get("vial_advisory"), "A 100-unit vial would have avoided the waste");
+  pin(get("units"), "200 units billed, within the 200 that the record supports",
+    "100 administered + 100 JW = 200 billed; 200 ≤ 200, no excess");
+  pin(get("jw_jz"), "The JW line bills 100 units, within the 100 units wasted");
+});
+
+test("3.2 example case 3: weight-based dose, assumed vials, benchmark, dollars wording", () => {
+  const { get } = example(2);
+  pin(get("dose"), "Dose: 400 mg = 40 billing units (10 mg each)", "5 mg/kg × 80 kg = 400 mg; 400 mg ÷ 10 mg = 40 billing units");
+  pin(get("vials"), "Drew 400 mg from 4 vials (100 + 100 + 100 + 100), no waste (assumed: least-waste combination)",
+    "100 + 100 + 100 + 100 = 400 mg drawn; 400 mg − 400 mg = 0 mg waste; 400 mg ÷ 10 mg = 40 valid billing units");
+  pin(get("units"), "10 units billed above the 40 that the record supports", "50 administered + 0 JW = 50 billed; 50 − 40 = 10 excess");
+  pin(get("benchmark"), "Billed $200.00 per unit, 6.70x the October 2026 CMS payment limit ($29.856 per unit)",
+    "$10,000.00 ÷ 50 units = $200.00 per unit; $200.00 ÷ $29.856 = 6.70x; 50 units × $29.856 = $1,492.80");
+  pin(get("dollars"), "$298.56 at stake at 100% of the CMS payment limit", "10 excess units × $29.856 × 100% = $298.56");
+});
+
+test("3.2 example case 4: Activase vials, JW, dollars wording", () => {
+  const { get } = example(3);
+  pin(get("dose"), "Dose: 63 mg = 63 billing units (1 mg each)", "0.9 mg/kg × 70 kg = 63 mg; 63 mg ÷ 1 mg = 63 billing units");
+  pin(get("vials"), "Drew 100 mg from 1 vial, 37 mg wasted (37 billing units) (assumed: least-waste combination)",
+    "100 mg drawn (1 vial); 100 mg − 63 mg = 37 mg waste; 100 mg ÷ 1 mg = 100 valid billing units");
+  pin(get("jw_jz"), "The JW line bills 37 units, within the 37 units wasted");
+  pin(get("benchmark"), "Billed $300.00 per unit, 3.05x the October 2026 CMS payment limit ($98.416 per unit)",
+    "$30,000.00 ÷ 100 units = $300.00 per unit; $300.00 ÷ $98.416 = 3.05x; 100 units × $98.416 = $9,841.60");
+  pin(get("dollars"), "$0.00 at stake at 100% of the CMS payment limit", "0 excess units × $98.416 × 100% = $0.00");
+});
+
+test("3.2 example case 8: BSA-based dose, three vials, fractional JW, benchmark wording", () => {
+  const { get } = example(4);
+  pin(get("dose"), "Dose: 675 mg = 67.5 billing units (10 mg each)", "375 mg/m2 × 1.8 m2 = 675 mg; 675 mg ÷ 10 mg = 67.5 billing units");
+  pin(get("vials"), "Drew 700 mg from 3 vials (500 + 100 + 100), 25 mg wasted (2.5 billing units) (assumed: least-waste combination)",
+    "500 + 100 + 100 = 700 mg drawn; 700 mg − 675 mg = 25 mg waste; 700 mg ÷ 10 mg = 70 valid billing units");
+  pin(get("jw_jz"), "needs info: fractional unit split, rounding rule not modeled (administered 67.5, waste 2.5 units)");
+  pin(get("benchmark"), "Billed $342.86 per unit, 4.76x the October 2026 CMS payment limit ($72.094 per unit)",
+    "$24,000.00 ÷ 70 units = $342.86 per unit; $342.86 ÷ $72.094 = 4.76x; 70 units × $72.094 = $5,046.58");
+});
+
+test("3.2 capped Activase (110 kg, acute ischemic stroke, 90 + 10 JW): dose and JW wording", () => {
+  const { get } = example(3, { weightKg: "110", indicationId: "acute_ischemic_stroke" }, { unitsBilled: "90", jwUnitsBilled: "10" });
+  pin(get("dose"), "Dose: 90 mg = 90 billing units (1 mg each), capped at label maximum (90 mg)",
+    "0.9 mg/kg × 110 kg = 99 mg; capped at label maximum (90 mg); 90 mg ÷ 1 mg = 90 billing units");
+  pin(get("jw_jz"), "The JW line bills 10 units, within the 10 units wasted");
+});
+
+test("3.2 stop-loss dollars wording keeps the full-precision payment limit", () => {
+  const { get } = example(2, { contractType: "stoploss_outlier_carveout" });
+  pin(get("dollars"), "$2,000.00 at the billed rate, or $298.56 at the CMS payment limit; recovery depends on contract terms",
+    "10 excess units × $200.00 billed per unit = $2,000.00; 10 excess units × $29.856 = $298.56");
+});
+
+test("3.2 dollars needs info carries the 'needs info:' prefix", () => {
+  const { get } = example(2, { contractType: "percent_of_charges", chargesContractPercent: "50" }, { amountBilled: "" });
+  pin(get("dollars"), "needs info: billed per unit is unavailable (amount billed blank or no units billed)");
+  const noPct = example(0, { aspContractPercent: "" });
+  pin(noPct.get("dollars"), "needs info: aspContractPercent is required for an ASP fee schedule contract");
+});
+
+test("3.2 documented vial that does not cover the dose: wording", () => {
+  const { get } = example(0, { doseAmount: "200" });
+  pin(get("vials"), "The documented vial (100 units) does not cover the documented dose (200 units)",
+    "100 = 100 units drawn, less than the 200 units dose; 100 units ÷ 1 unit = 100 valid billing units");
+});
+
+test("3.2 every flag and advisory carries a summary phrase", () => {
+  const runs = [example(0), example(1), example(2), example(3), example(4), example(0, { vials: "300" }),
+    example(3, { weightKg: "110" }, { unitsBilled: "90", jwUnitsBilled: "10" })];
+  for (const { results } of runs)
+    for (const r of results.filter((x) => x.status === "flag" || x.status === "advisory"))
+      assert.ok(r.summary && r.summary.trim() !== "", `${r.id} (${r.status}) has no summary phrase`);
+});
+
+test("3.2 page summary for case 1 and case 2", () => {
+  const one = example(0);
+  assert.equal(summarize({ line: one.line, results: one.results }),
+    "2 flags: 100 excess units ($651.40 at stake, illustrative); JZ expected but not reported.");
+  const two = example(1);
+  assert.equal(summarize({ line: two.line, results: two.results }),
+    "No flags. 1 advisory: a 100-unit vial would have avoided the waste.");
 });
 
 if (failed) {

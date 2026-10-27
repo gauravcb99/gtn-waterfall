@@ -84,6 +84,27 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
   // Vials and waste.
   const sizes = drug.vialSizes.map((v) => v.value.amount);
   const documented = !!line.vialsUsed?.length;
+  // J2997 also covers Cathflo Activase (2 mg vials). With no vials documented, fewer units billed than the
+  // smallest Activase vial, and no labeled indication selected, no Activase vial is assumed.
+  const smallest = Math.min(...sizes);
+  if (
+    drug.id === "J2997" && !documented && totalBilled < round4(smallest / bu.amount) &&
+    !drug.dosing.some((e) => e.id === line.indicationId)
+  ) {
+    const brand = drug.brandAliases.value[0];
+    const why = `${units(totalBilled)} billed is less than the smallest ${brand} vial (${qty(smallest)})`;
+    const message =
+      `${why}, and no vials are documented, so this may be Cathflo Activase. No vial is assumed. ` +
+      "Enter the vials used, or use the NDC line type.";
+    results.push({
+      id: "vials", status: "needs_info", message, summary: `the vials, because ${why} and none are documented`,
+      values: {}, citations: vialCites,
+    });
+    for (const id of ["units", "jw_jz", "dollars"] as const)
+      results.push({ id, status: "needs_info", message: `This check needs the vials. ${message}`, waitsOn: "vials", values: {}, citations: vialCites });
+    results.push(benchmark);
+    return { status: "ran", drugId: drug.id, results };
+  }
   const vials = documented ? [...line.vialsUsed!].sort((a, b) => b - a) : leastWasteCombination(sizes, dose.doseAmount);
   const unlabeled = Array.from(new Set(vials.filter((s) => !sizes.includes(s))));
   if (unlabeled.length) {

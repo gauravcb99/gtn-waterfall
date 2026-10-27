@@ -94,9 +94,11 @@ export function summarize(ctx: Ctx): string {
   if (advisories.length)
     parts.push(`${advisories.length} ${plural(advisories.length, "advisory", "advisories")}: ${advisories.map(phrase).join("; ")}.`);
   if (needs.length) {
-    const waiting = needs.filter((r) => r.waitsOn === "dose").length;
-    const reasons = needs.filter((r) => r.waitsOn !== "dose").map((r) => r.summary ?? TITLES[r.id]);
-    if (waiting) reasons.push(`${waiting} ${plural(waiting, "check waits", "checks wait")} on the dose`);
+    const reasons = needs.filter((r) => !r.waitsOn).map((r) => r.summary ?? TITLES[r.id]);
+    for (const on of ["dose", "vials"] as const) {
+      const waiting = needs.filter((r) => r.waitsOn === on).length;
+      if (waiting) reasons.push(`${waiting} ${plural(waiting, "check waits", "checks wait")} on the ${on}`);
+    }
     parts.push(`${needs.length} needs info: ${reasons.join("; ")}.`);
   }
   return parts.join(" ");

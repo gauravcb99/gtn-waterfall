@@ -882,6 +882,71 @@ test("4c hospital file: no description that carries a Cathflo NDC matches J2997"
   assert.ok(n >= 5, `only ${n} Cathflo-NDC rows found`);
 });
 
+// --- Stage 4a part D: a J2997 HCPCS line too small for any Activase vial may be Cathflo ---
+
+const CATHFLO_GUARD = (billed: number) =>
+  `${billed} units billed is less than the smallest Activase vial (50 mg), and no vials are documented, ` +
+  "so this may be Cathflo Activase. No vial is assumed. Enter the vials used, or use the NDC line type.";
+const smallJ2997 = (over: Partial<ClaimLine> = {}) => {
+  const l = line({ hcpcs: "J2997", dose: { amount: 2, unit: "mg" }, unitsBilled: 2, jzReported: true, amountBilled: 100, ...over });
+  return { ...check(l, "J2997"), line: l };
+};
+const strokeJ2997 = (over: Partial<ClaimLine> = {}) => {
+  const l = line({
+    hcpcs: "J2997", dose: { amount: 0.9, unit: "mg/kg" }, weightKg: 50, unitsBilled: 45, jwUnitsBilled: 0, amountBilled: 4500, ...over,
+  });
+  return { ...check(l, "J2997"), line: l };
+};
+
+test("4d J2997 HCPCS, 2 units, dose 2 mg, JZ, no vials: no JW flag, needs info with one reason", () => {
+  const { get, results, line: l } = smallJ2997();
+  assert.equal(get("dose").status, "info");
+  assert.equal(get("benchmark").status, "info");
+  assert.ok(!results.some((r) => r.status === "flag"), "no flag expected");
+  pin(get("vials"), CATHFLO_GUARD(2));
+  for (const id of ["units", "jw_jz", "dollars"] as const) {
+    assert.equal(get(id).status, "needs_info");
+    assert.equal(get(id).waitsOn, "vials");
+    pin(get(id), `This check needs the vials. ${CATHFLO_GUARD(2)}`);
+  }
+  assert.equal(summarize({ line: l, results }),
+    "No flags. 4 needs info: the vials, because 2 units billed is less than the smallest Activase vial (50 mg) " +
+      "and none are documented; 3 checks wait on the vials.");
+});
+
+test("4d the same line with a 50 mg vial documented: the normal checks run", () => {
+  const { get } = smallJ2997({ vialsUsed: [50] });
+  assert.equal(get("vials").status, "pass");
+  assert.equal(get("vials").values.drawn, 50);
+  assert.equal(get("vials").values.waste, 48);
+  assert.equal(get("jw_jz").status, "flag");
+  assert.equal(get("jw_jz").summary, "JW expected but not billed");
+});
+
+test("4d J2997 0.9 mg/kg at 50 kg, 45 units, no JW, stroke indication: still flags JW expected", () => {
+  const { get } = strokeJ2997({ indicationId: "acute_ischemic_stroke" });
+  assert.equal(get("dose").values.doseAmount, 45);
+  assert.deepEqual(get("vials").values.vials, [50]);
+  assert.equal(get("vials").values.waste, 5);
+  assert.equal(get("jw_jz").status, "flag");
+  assert.equal(get("jw_jz").summary, "JW expected but not billed");
+});
+
+test("4d the same line with no indication: needs info (the accepted miss)", () => {
+  const { get, results } = strokeJ2997();
+  assert.equal(get("dose").values.doseAmount, 45);
+  pin(get("vials"), CATHFLO_GUARD(45));
+  assert.equal(get("jw_jz").status, "needs_info");
+  assert.equal(get("jw_jz").waitsOn, "vials");
+  assert.ok(!results.some((r) => r.status === "flag"), "no flag expected");
+});
+
+test("4d the guard is J2997 only: a small J9312 line without vials still assumes a vial", () => {
+  const { get } = check(line({ hcpcs: "J9312", dose: { amount: 100, unit: "mg" }, unitsBilled: 10, amountBilled: 100 }), "J9312");
+  assert.equal(get("vials").status, "pass");
+  assert.equal(get("vials").values.basis, "assumed: least-waste combination");
+});
+
 if (failed) {
   console.log(`\n${failed} test(s) failed`);
   process.exit(1);

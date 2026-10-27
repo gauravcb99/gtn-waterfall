@@ -78,7 +78,7 @@ export type CheckResult = {
   label?: string;
   formula?: string;
   summary?: string; // short phrase for the results summary; set on every flag, advisory and needs-info result
-  waitsOn?: "dose"; // needs info only because the dose could not be worked out; the summary counts these instead
+  waitsOn?: "dose" | "vials"; // needs info only because that step could not run; the summary counts these instead
 };
 
 export type ChecksOutcome =

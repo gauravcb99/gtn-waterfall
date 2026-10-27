@@ -16,6 +16,7 @@ import ResultCard from "./ResultCard";
 import { CardTitle, inputClass, labelClass } from "./ui";
 
 const MATCH_FIELDS: (keyof ClaimFormState)[] = ["lineType", "description", "hcpcs", "ndc"];
+const matchedIds = (m: MatchResult) => (m.status === "candidates" ? m.candidates.map((c) => c.drugId).join(",") : "");
 
 export default function DrugLineReview() {
   const [claim, setClaim] = useState<ClaimFormState>(EMPTY_CLAIM);
@@ -23,6 +24,8 @@ export default function DrugLineReview() {
   const [chargeNote, setChargeNote] = useState<string | null>(null);
   const [match, setMatch] = useState<MatchResult | null>(null);
   const [drugId, setDrugId] = useState<string | null>(null);
+  // Drug ids of the last match, which the record was filled for. Editing the claim keeps it.
+  const [recordFor, setRecordFor] = useState("");
   // The checks outcome together with the exact claim line it was run on (the display reads both).
   const [ran, setRan] = useState<{ line: ClaimLine; outcome: ChecksOutcome } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -47,10 +50,18 @@ export default function DrugLineReview() {
   }
 
   function find(c: ClaimFormState) {
-    setMatch(matchLine(c));
+    const m = matchLine(c);
+    setMatch(m);
+    setRecordFor(matchedIds(m));
     setDrugId(null);
     setRan(null);
     setError(null);
+    return m;
+  }
+
+  // Find drug keeps the record while the line matches the same drug; a different drug starts a blank record.
+  function findAgain() {
+    if (matchedIds(find(claim)) !== recordFor) setRecord(EMPTY_RECORD);
   }
 
   function loadExample(index: number) {
@@ -107,7 +118,7 @@ export default function DrugLineReview() {
           </select>
         </label>
 
-        <ClaimForm claim={claim} onChange={editClaim} onFind={() => { setRecord(EMPTY_RECORD); find(claim); }}
+        <ClaimForm claim={claim} onChange={editClaim} onFind={findAgain}
           chargeNote={chargeNote} />
 
         {match && (

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { parseCsv, validateDrugs } from "./build-drug-line-data";
 import { EXCLUDED_PRODUCTS, matchLine } from "../lib/drug-line-review/match";
 import cmsJson from "../data/drug-line-review/cms-asp-oct-2026.json";
+import hospital from "../data/drug-line-review/hospital-charges.json";
 import { drugs } from "../lib/drug-line-review/data";
 import { EXAMPLES } from "../components/drug-line-review/examples";
 import { toClaimLine, type ClaimFormState, type RecordFormState } from "../components/drug-line-review/forms";
@@ -802,6 +803,83 @@ test("4a needs-info wording: JW/JZ when the documented vials do not cover the do
   const { get } = example(0, { doseAmount: "200" });
   pin(get("jw_jz"), "The documented vials do not cover the documented dose, so the expected modifier can't be determined.");
   assert.equal(get("jw_jz").summary, "the JW / JZ modifiers, because the documented vials do not cover the dose");
+});
+
+// --- Stage 4a part C: a description-only alteplase line can be Cathflo ---
+
+const NOT_ACTIVASE =
+  "ALTEPLASE without ACTIVASE or a labeled Activase strength (50 mg, 100 mg): can't be told apart from " +
+  "Cathflo Activase (different product under J2997); use the NDC line type";
+
+const notLabeled = (mg: string) =>
+  `${mg} mg isn't a labeled Activase vial (50 mg, 100 mg): may be Cathflo Activase (different product under J2997); use the NDC line type`;
+
+test("4c 'ALTEPLASE 2 MG VIAL (OR)' -> no match: 2 mg isn't a labeled Activase vial", () => {
+  const m = desc("ALTEPLASE 2 MG VIAL (OR)");
+  assert.equal(m.status, "no_match");
+  assert.equal((m as { reason: string }).reason, notLabeled("2"));
+});
+
+test("4c 'ALTEPLASE FOR ANGIOJET (OR)' (no brand, strength or indication) -> no match: can't be told apart", () => {
+  const m = desc("ALTEPLASE FOR ANGIOJET (OR)");
+  assert.equal(m.status, "no_match");
+  assert.equal((m as { reason: string }).reason, NOT_ACTIVASE);
+});
+
+test("4c 'ACTIVASE 2 MG' -> no match: a stated strength that isn't a labeled vial", () => {
+  const m = desc("ACTIVASE 2 MG");
+  assert.equal(m.status, "no_match");
+  assert.equal((m as { reason: string }).reason, notLabeled("2"));
+});
+
+test("4c 'ALTEPLASE FOR ACUTE STROKE PROTOCOL - BOLUS' -> J2997 MEDIUM (labeled indication)", () => {
+  const m = desc("ALTEPLASE FOR ACUTE STROKE PROTOCOL - BOLUS");
+  assert.equal(m.status, "candidates");
+  if (m.status !== "candidates") return;
+  assert.equal(m.candidates.length, 1);
+  assert.equal(m.candidates[0].drugId, "J2997");
+  assert.equal(m.candidates[0].confidence, "MEDIUM");
+});
+
+test("4c 'ACTIVASE 50 MG (1 MG/ML)' -> J2997 HIGH (the concentration is ignored)", () => {
+  const m = desc("ACTIVASE 50 MG (1 MG/ML)");
+  assert.equal(m.status, "candidates");
+  if (m.status !== "candidates") return;
+  assert.equal(m.candidates.length, 1);
+  assert.equal(m.candidates[0].drugId, "J2997");
+  assert.equal(m.candidates[0].confidence, "HIGH");
+});
+
+test("4c 'ALTEPLASE 100 MG INTRAVENOUS SOLUTION' -> still J2997 HIGH", () => {
+  const m = desc("ALTEPLASE 100 MG INTRAVENOUS SOLUTION");
+  assert.equal(m.status, "candidates");
+  if (m.status !== "candidates") return;
+  assert.equal(m.candidates.length, 1);
+  assert.equal(m.candidates[0].drugId, "J2997");
+  assert.equal(m.candidates[0].confidence, "HIGH");
+});
+
+test("4c 'HC ACTIVASE INJ' (brand named, no strength) -> still a J2997 candidate", () => {
+  const m = desc("HC ACTIVASE INJ");
+  assert.equal(m.status, "candidates");
+  if (m.status !== "candidates") return;
+  assert.equal(m.candidates[0].drugId, "J2997");
+  assert.equal(m.candidates[0].confidence, "MEDIUM");
+});
+
+test("4c 'CATHFLO ACTIVASE 2 MG' keeps its existing reason", () => {
+  const m = desc("CATHFLO ACTIVASE 2 MG");
+  assert.equal(m.status, "no_match");
+  assert.equal((m as { reason: string }).reason, "CATHFLO: excluded product");
+});
+
+test("4c hospital file: no description that carries a Cathflo NDC matches J2997", () => {
+  let n = 0;
+  for (const x of hospital.items.filter((i) => i.codes.some((c) => ["50242-0041-10", "50242-0041-64"].includes(c.code)))) {
+    n++;
+    assert.equal(desc(x.description).status, "no_match", x.description);
+  }
+  assert.ok(n >= 5, `only ${n} Cathflo-NDC rows found`);
 });
 
 if (failed) {

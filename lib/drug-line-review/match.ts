@@ -85,6 +85,7 @@ function matchDescription(description: string): MatchResult {
     return { status: "no_match", reason: "BOTULINUM TOXIN without ONA/ONABOTULINUMTOXINA/BOTOX: ambiguous across products" };
 
   const candidates: MatchCandidate[] = [];
+  let notActivase: string | undefined;
   for (const d of drugs) {
     const names = [d.genericName.value, ...d.brandAliases.value].map((n) => n.toUpperCase());
     const nameTokens = tokens.filter((t) => names.includes(t));
@@ -105,12 +106,36 @@ function matchDescription(description: string): MatchResult {
         i + 1 < tokens.length &&
         d.vialSizes.some((v) => v.value.amount === Number(t) && measure(v.value.unit) === measure(tokens[i + 1])),
     );
+    // Alteplase without a labeled vial strength may be Cathflo Activase (same HCPCS, different
+    // product). Any other stated strength rules it out; the brand or a labeled indication keeps it.
+    let extra: string[] = [];
+    if (d.id === "J2997" && strength < 0) {
+      const brand = d.brandAliases.value[0];
+      const unit = d.vialSizes[0].value.unit;
+      const sizes = d.vialSizes.map((v) => `${v.value.amount} ${v.value.unit}`).join(", ");
+      // An amount in the vial unit, but not a concentration such as "1 MG/ML".
+      const stated = new RegExp(`(\\d+(?:\\.\\d+)?)\\s*${unit}\\b(?!\\s*/\\s*ML\\b)`, "i").exec(upper);
+      if (stated) {
+        notActivase =
+          `${stated[1]} ${unit} isn't a labeled ${brand} vial (${sizes}): may be Cathflo Activase ` +
+          "(different product under J2997); use the NDC line type";
+        continue;
+      }
+      // The indication's last word, e.g. STROKE for "Acute Ischemic Stroke".
+      extra = d.dosing.map((e) => e.indication.value.toUpperCase().split(" ").pop()!).filter((w) => tokens.includes(w));
+      if (!nameTokens.some((t) => names.slice(1).includes(t)) && !extra.length) {
+        notActivase =
+          `${names[0]} without ${names[1]} or a labeled ${brand} strength (${sizes}): can't be told apart from ` +
+          "Cathflo Activase (different product under J2997); use the NDC line type";
+        continue;
+      }
+    }
     candidates.push(
       strength >= 0
         ? { drugId: d.id, confidence: "HIGH", matchedTokens: [...nameTokens, tokens[strength], tokens[strength + 1]] }
-        : { drugId: d.id, confidence: "MEDIUM", matchedTokens: nameTokens },
+        : { drugId: d.id, confidence: "MEDIUM", matchedTokens: [...nameTokens, ...extra] },
     );
   }
-  if (!candidates.length) return { status: "no_match", reason: "nothing matches the library" };
+  if (!candidates.length) return { status: "no_match", reason: notActivase ?? "nothing matches the library" };
   return { status: "candidates", candidates };
 }

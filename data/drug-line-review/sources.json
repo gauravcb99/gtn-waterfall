@@ -1,0 +1,112 @@
+{
+  "sources": [
+    {
+      "id": "cms-asp-payment-limit-oct-2026",
+      "title": "October 2026 Medicare Part B Payment Limit File (Section 508 CSV)",
+      "publisher": "CMS",
+      "url": "https://www.cms.gov/files/zip/october-2026-medicare-part-b-payment-limit-files-final.zip",
+      "sourcePage": "https://www.cms.gov/medicare/payment/part-b-drugs/asp-pricing-files",
+      "folder": "october_2026_medicare_part_b_payment_limit_file_091626-final_file",
+      "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv",
+      "quarter": "October 2026",
+      "effective": "October 1, 2026 through December 31, 2026",
+      "version": "091626 (file name date); CMS page lists the files as Final, 09/17/2026",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "cms-asp-crosswalk-oct-2026",
+      "title": "October 2026 ASP NDC-HCPCS Crosswalk (Section 508 CSV)",
+      "publisher": "CMS",
+      "url": "https://www.cms.gov/files/zip/october-2026-ndc-hcpcs-crosswalk-final.zip",
+      "sourcePage": "https://www.cms.gov/medicare/payment/part-b-drugs/asp-pricing-files",
+      "folder": "october_2026_asp_ndc_hcpcs_crosswalk_091626",
+      "file": "section 508 version of October 2026 ASP NDC-HCPCS Crosswalk 091126.csv",
+      "quarter": "October 2026",
+      "effective": "October 1, 2026 through December 31, 2026",
+      "version": "091626 (folder name date); the CSV inside is dated 091126; CMS page lists the files as Final, 09/17/2026",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "cms-crosswalk-intro-oct-2026",
+      "title": "NDC-HCPCS Crosswalk Introduction Text (field descriptions)",
+      "publisher": "CMS",
+      "url": "https://www.cms.gov/files/zip/october-2026-ndc-hcpcs-crosswalk-final.zip",
+      "folder": "october_2026_asp_ndc_hcpcs_crosswalk_091626",
+      "file": "section 508 version of NDC-HCPCS Crosswalk Introduction Text 090326.csv",
+      "version": "090326 (file name date)",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "dailymed-botox",
+      "title": "BOTOX (onabotulinumtoxinA) injection, powder, lyophilized, for solution [Allergan, Inc.]",
+      "publisher": "DailyMed (NLM)",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=33d066a9-34ff-4a1a-b38b-d10983df3300",
+      "xmlUrl": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/33d066a9-34ff-4a1a-b38b-d10983df3300.xml",
+      "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300",
+      "version": "SPL version 62; document effectiveTime 20231118; DailyMed published Aug 03, 2026",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "dailymed-remicade",
+      "title": "REMICADE (infliximab) injection, powder, lyophilized, for solution [Janssen Biotech, Inc.]",
+      "publisher": "DailyMed (NLM)",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a0a046c1-056d-45a9-bfd9-13b47c24f257",
+      "xmlUrl": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/a0a046c1-056d-45a9-bfd9-13b47c24f257.xml",
+      "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257",
+      "version": "SPL version 37; document effectiveTime 20250603; DailyMed published Jun 05, 2025",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "dailymed-activase",
+      "title": "ACTIVASE (alteplase) kit [Genentech, Inc.]",
+      "publisher": "DailyMed (NLM)",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c669f77c-fa48-478b-a14b-80b20a0139c2",
+      "xmlUrl": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/c669f77c-fa48-478b-a14b-80b20a0139c2.xml",
+      "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2",
+      "version": "SPL version 15; document effectiveTime 20260120; DailyMed published Jan 26, 2026",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "dailymed-avastin",
+      "title": "AVASTIN (bevacizumab) injection, solution [Genentech, Inc.]",
+      "publisher": "DailyMed (NLM)",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=939b5d1f-9fb2-4499-80ef-0607aa6b114e",
+      "xmlUrl": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/939b5d1f-9fb2-4499-80ef-0607aa6b114e.xml",
+      "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e",
+      "version": "SPL version 39; document effectiveTime 20250106; DailyMed published Jan 08, 2025",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "dailymed-rituxan",
+      "title": "RITUXAN (rituximab) injection, solution [Genentech, Inc.]",
+      "publisher": "DailyMed (NLM)",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b172773b-3905-4a1c-ad95-bab4b6126563",
+      "xmlUrl": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/b172773b-3905-4a1c-ad95-bab4b6126563.xml",
+      "setid": "b172773b-3905-4a1c-ad95-bab4b6126563",
+      "version": "SPL version 36; document effectiveTime 20250106; DailyMed published Jan 08, 2025",
+      "downloadDate": "2026-10-23"
+    },
+    {
+      "id": "cms-jw-jz-faq",
+      "title": "Medicare Program: Discarded Drugs and Biologicals – JW Modifier and JZ Modifier Policy, Frequently Asked Questions",
+      "publisher": "CMS",
+      "url": "https://www.cms.gov/medicare/medicare-fee-for-service-payment/hospitaloutpatientpps/downloads/jw-modifier-faqs.pdf",
+      "version": "No date printed in the document. PDF metadata ModDate 2025-12-23 (created 2025-12-22); HTTP Last-Modified Tue, 23 Dec 2025 11:47:26 GMT",
+      "downloadDate": "2026-10-23",
+      "quotes": {
+        "jwApplies": {
+          "section": "Page 1, Policy",
+          "quote": "Effective January 1, 2017, providers and suppliers are required to report the JW modifier on all claims that bill for drugs and biologicals (hereafter, drug) separately payable under Medicare Part B with unused and discarded amounts (hereafter, discarded amounts) from single-dose containers or single-use packages (hereafter, single-dose containers)."
+        },
+        "jzApplies": {
+          "section": "Page 1, Policy",
+          "quote": "Beginning no later than July 1, 2023: providers and suppliers are required to report the JZ modifier on all claims that bill for drugs from single-dose containers that are separately payable under Medicare Part B when there are no discarded amounts."
+        },
+        "jzEffectiveDate": {
+          "section": "Page 2, A5",
+          "quote": "Beginning no later than July 1, 2023, the JZ modifier is required to attest that there were no discarded amounts and no JW modifier amount is reported."
+        }
+      }
+    }
+  ]
+}

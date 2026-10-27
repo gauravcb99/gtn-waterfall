@@ -1,0 +1,316 @@
+{
+  "drugs": [
+    {
+      "id": "J0585",
+      "genericName": {
+        "value": "onabotulinumtoxinA",
+        "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "Highlights (title)", "quote": "BOTOX ® (onabotulinumtoxinA) for injection, for intramuscular, intradetrusor, or intradermal use" }
+      },
+      "brandAliases": {
+        "value": ["BOTOX"],
+        "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "Highlights (title)", "quote": "BOTOX ® (onabotulinumtoxinA) for injection, for intramuscular, intradetrusor, or intradermal use" }
+      },
+      "hcpcs": {
+        "value": "J0585",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J0585", "quote": "J0585,\"Injection,onabotulinumtoxina\",1 UNIT,6.514,20.000,,,,,,,," }
+      },
+      "hcpcsDescriptor": {
+        "value": "Injection,onabotulinumtoxina",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J0585, column Short Description", "quote": "J0585,\"Injection,onabotulinumtoxina\",1 UNIT,6.514,20.000,,,,,,,," }
+      },
+      "billingUnitRaw": {
+        "value": "1 UNIT",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J0585, column HCPCS Code Dosage", "quote": "J0585,\"Injection,onabotulinumtoxina\",1 UNIT,6.514,20.000,,,,,,,," }
+      },
+      "billingUnit": {
+        "value": { "amount": 1, "unit": "UNIT" },
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J0585, column HCPCS Code Dosage", "quote": "J0585,\"Injection,onabotulinumtoxina\",1 UNIT,6.514,20.000,,,,,,,," }
+      },
+      "vialSizes": [
+        {
+          "value": { "amount": 100, "unit": "Units", "ndcs": ["0023-1145-01"] },
+          "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "16.1 How Supplied", "quote": "100 Units NDC 0023-1145-01" }
+        },
+        {
+          "value": { "amount": 200, "unit": "Units", "ndcs": ["0023-3921-02"] },
+          "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "16.1 How Supplied", "quote": "200 Units NDC 0023-3921-02" }
+        }
+      ],
+      "singleDose": {
+        "value": true,
+        "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "16.1 How Supplied", "quote": "BOTOX (onabotulinumtoxinA) for injection is a sterile, vacuum-dried powder supplied in a single-dose vial in the following sizes:" }
+      },
+      "dosing": [
+        {
+          "id": "overactive_bladder",
+          "indication": {
+            "value": "Overactive Bladder",
+            "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "2.3 Adult Bladder Dysfunction", "quote": "Overactive Bladder" }
+          },
+          "dose": {
+            "value": { "amount": 100, "unit": "Units" },
+            "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "2.3 Adult Bladder Dysfunction (Overactive Bladder)", "quote": "The recommended dose is 100 Units of BOTOX, and is the maximum recommended dose." }
+          }
+        },
+        {
+          "id": "detrusor_overactivity_neurologic",
+          "indication": {
+            "value": "Detrusor Overactivity associated with a Neurologic Condition",
+            "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "2.3 Adult Bladder Dysfunction", "quote": "Detrusor Overactivity associated with a Neurologic Condition" }
+          },
+          "dose": {
+            "value": { "amount": 200, "unit": "Units" },
+            "cite": { "source": "dailymed-botox", "setid": "33d066a9-34ff-4a1a-b38b-d10983df3300", "section": "2.3 Adult Bladder Dysfunction (Detrusor Overactivity associated with a Neurologic Condition)", "quote": "The recommended dose is 200 Units of BOTOX per treatment, and should not be exceeded." }
+          }
+        }
+      ]
+    },
+    {
+      "id": "J1745",
+      "genericName": {
+        "value": "infliximab",
+        "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "Highlights (title)", "quote": "REMICADE ®(infliximab) for injection, for intravenous use" }
+      },
+      "brandAliases": {
+        "value": ["REMICADE"],
+        "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "Highlights (title)", "quote": "REMICADE ®(infliximab) for injection, for intravenous use" }
+      },
+      "hcpcs": {
+        "value": "J1745",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J1745", "quote": "J1745,Infliximab not biosimil 10mg,10 MG,29.856,20.000,,,,,,,," }
+      },
+      "hcpcsDescriptor": {
+        "value": "Infliximab not biosimil 10mg",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J1745, column Short Description", "quote": "J1745,Infliximab not biosimil 10mg,10 MG,29.856,20.000,,,,,,,," }
+      },
+      "billingUnitRaw": {
+        "value": "10 MG",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J1745, column HCPCS Code Dosage", "quote": "J1745,Infliximab not biosimil 10mg,10 MG,29.856,20.000,,,,,,,," }
+      },
+      "billingUnit": {
+        "value": { "amount": 10, "unit": "MG" },
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J1745, column HCPCS Code Dosage", "quote": "J1745,Infliximab not biosimil 10mg,10 MG,29.856,20.000,,,,,,,," }
+      },
+      "vialSizes": [
+        {
+          "value": { "amount": 100, "unit": "mg", "ndcs": ["57894-030-01"] },
+          "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "16 How Supplied", "quote": "Each single-dose vial contains 100 mg of infliximab as a sterile, preservative-free, white lyophilized powder for reconstitution and dilution" }
+        }
+      ],
+      "singleDose": {
+        "value": true,
+        "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "16 How Supplied", "quote": "REMICADE ®(infliximab) for injection is supplied in a carton containing one single-dose vial (NDC 57894-030-01)." }
+      },
+      "dosing": [
+        {
+          "id": "adult_crohns_disease",
+          "indication": {
+            "value": "Adult Crohn's Disease",
+            "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "2.1 Dosage in Adult Crohn's Disease", "quote": "Dosage in Adult Crohn's Disease" }
+          },
+          "dose": {
+            "value": { "amount": 5, "unit": "mg/kg" },
+            "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "2.1 Dosage in Adult Crohn's Disease", "quote": "The recommended dosage of REMICADE is 5 mg/kg given as an intravenous induction regimen at 0, 2 and 6 weeks followed by a maintenance regimen of 5 mg/kg every 8 weeks thereafter for the treatment of adults with moderately to severely active CD or fistulizing CD." }
+          },
+          "regimen": {
+            "value": "intravenous induction regimen at 0, 2 and 6 weeks followed by a maintenance regimen of 5 mg/kg every 8 weeks thereafter",
+            "cite": { "source": "dailymed-remicade", "setid": "a0a046c1-056d-45a9-bfd9-13b47c24f257", "section": "2.1 Dosage in Adult Crohn's Disease", "quote": "The recommended dosage of REMICADE is 5 mg/kg given as an intravenous induction regimen at 0, 2 and 6 weeks followed by a maintenance regimen of 5 mg/kg every 8 weeks thereafter for the treatment of adults with moderately to severely active CD or fistulizing CD." }
+          }
+        }
+      ]
+    },
+    {
+      "id": "J2997",
+      "genericName": {
+        "value": "alteplase",
+        "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "Highlights (title)", "quote": "Activase (alteplase) for injection, for intravenous use" }
+      },
+      "brandAliases": {
+        "value": ["Activase"],
+        "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "Highlights (title)", "quote": "Activase (alteplase) for injection, for intravenous use" }
+      },
+      "hcpcs": {
+        "value": "J2997",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J2997", "quote": "J2997,Alteplase recombinant,1 MG,98.416,20.000,,,,,,,," }
+      },
+      "hcpcsDescriptor": {
+        "value": "Alteplase recombinant",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J2997, column Short Description", "quote": "J2997,Alteplase recombinant,1 MG,98.416,20.000,,,,,,,," }
+      },
+      "billingUnitRaw": {
+        "value": "1 MG",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J2997, column HCPCS Code Dosage", "quote": "J2997,Alteplase recombinant,1 MG,98.416,20.000,,,,,,,," }
+      },
+      "billingUnit": {
+        "value": { "amount": 1, "unit": "MG" },
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J2997, column HCPCS Code Dosage", "quote": "J2997,Alteplase recombinant,1 MG,98.416,20.000,,,,,,,," }
+      },
+      "vialSizes": [
+        {
+          "value": { "amount": 50, "unit": "mg", "ndcs": ["50242-044-13"] },
+          "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "16.1 How Supplied", "quote": "Each 50 mg Activase vial (29 million IU) is packaged with diluent for reconstitution (50 mL Sterile Water for Injection, USP): NDC 50242-044-13." }
+        },
+        {
+          "value": { "amount": 100, "unit": "mg", "ndcs": ["50242-085-27"] },
+          "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "16.1 How Supplied", "quote": "Each 100 mg Activase vial (58 million IU) is packaged with diluent for reconstitution (100 mL Sterile Water for Injection, USP), and one transfer device: NDC 50242-085-27." }
+        }
+      ],
+      "singleDose": {
+        "value": true,
+        "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "16.1 How Supplied", "quote": "Activase is supplied as a sterile, lyophilized powder in 50 mg single-dose vials containing vacuum and in 100 mg single-dose vials without vacuum." }
+      },
+      "dosing": [
+        {
+          "id": "acute_ischemic_stroke",
+          "indication": {
+            "value": "Acute Ischemic Stroke",
+            "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "Acute Ischemic Stroke" }
+          },
+          "dose": {
+            "value": { "amount": 0.9, "unit": "mg/kg" },
+            "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "The recommended dose is 0.9 mg/kg (not to exceed 90 mg total dose), with 10% of the total dose administered as an initial intravenous bolus over 1 minute and the remainder infused over 60 minutes." }
+          },
+          "maxTotalDose": {
+            "value": { "amount": 90, "unit": "mg" },
+            "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "The recommended dose is 0.9 mg/kg (not to exceed 90 mg total dose), with 10% of the total dose administered as an initial intravenous bolus over 1 minute and the remainder infused over 60 minutes." }
+          },
+          "regimen": {
+            "value": "10% of the total dose administered as an initial intravenous bolus over 1 minute and the remainder infused over 60 minutes",
+            "cite": { "source": "dailymed-activase", "setid": "c669f77c-fa48-478b-a14b-80b20a0139c2", "section": "2.1 Acute Ischemic Stroke", "quote": "The recommended dose is 0.9 mg/kg (not to exceed 90 mg total dose), with 10% of the total dose administered as an initial intravenous bolus over 1 minute and the remainder infused over 60 minutes." }
+          }
+        }
+      ]
+    },
+    {
+      "id": "J9035",
+      "genericName": {
+        "value": "bevacizumab",
+        "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "Highlights (title)", "quote": "AVASTIN® (bevacizumab) injection, for intravenous use" }
+      },
+      "brandAliases": {
+        "value": ["AVASTIN"],
+        "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "Highlights (title)", "quote": "AVASTIN® (bevacizumab) injection, for intravenous use" }
+      },
+      "hcpcs": {
+        "value": "J9035",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9035", "quote": "J9035,Bevacizumab injection,10 MG,75.492,20.000,,,,,,,," }
+      },
+      "hcpcsDescriptor": {
+        "value": "Bevacizumab injection",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9035, column Short Description", "quote": "J9035,Bevacizumab injection,10 MG,75.492,20.000,,,,,,,," }
+      },
+      "billingUnitRaw": {
+        "value": "10 MG",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9035, column HCPCS Code Dosage", "quote": "J9035,Bevacizumab injection,10 MG,75.492,20.000,,,,,,,," }
+      },
+      "billingUnit": {
+        "value": { "amount": 10, "unit": "MG" },
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9035, column HCPCS Code Dosage", "quote": "J9035,Bevacizumab injection,10 MG,75.492,20.000,,,,,,,," }
+      },
+      "vialSizes": [
+        {
+          "value": { "amount": 100, "unit": "mg", "volumeMl": 4, "ndcs": ["50242-060-01"] },
+          "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "16 How Supplied/Storage and Handling", "quote": "100 mg/4 mL (25 mg/mL): carton of one vial (NDC 50242-060-01)" }
+        },
+        {
+          "value": { "amount": 400, "unit": "mg", "volumeMl": 16, "ndcs": ["50242-061-01"] },
+          "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "16 How Supplied/Storage and Handling", "quote": "400 mg/16 mL (25 mg/mL): carton of one vial (NDC 50242-061-01)" }
+        }
+      ],
+      "singleDose": {
+        "value": true,
+        "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "16 How Supplied/Storage and Handling", "quote": "supplied as single-dose vials in the following strengths:" }
+      },
+      "dosing": [
+        {
+          "id": "first_line_nonsquamous_nsclc",
+          "indication": {
+            "value": "First-Line Non-Squamous Non-Small Cell Lung Cancer",
+            "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "2.3 First-Line Non-Squamous Non-Small Cell Lung Cancer", "quote": "First-Line Non-Squamous Non-Small Cell Lung Cancer" }
+          },
+          "dose": {
+            "value": { "amount": 15, "unit": "mg/kg" },
+            "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "2.3 First-Line Non-Squamous Non-Small Cell Lung Cancer", "quote": "The recommended dosage is 15 mg/kg intravenously every 3 weeks in combination with carboplatin and paclitaxel." }
+          },
+          "regimen": {
+            "value": "intravenously every 3 weeks in combination with carboplatin and paclitaxel",
+            "cite": { "source": "dailymed-avastin", "setid": "939b5d1f-9fb2-4499-80ef-0607aa6b114e", "section": "2.3 First-Line Non-Squamous Non-Small Cell Lung Cancer", "quote": "The recommended dosage is 15 mg/kg intravenously every 3 weeks in combination with carboplatin and paclitaxel." }
+          }
+        }
+      ]
+    },
+    {
+      "id": "J9312",
+      "genericName": {
+        "value": "rituximab",
+        "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "Highlights (title)", "quote": "RITUXAN® (rituximab) injection, for intravenous use" }
+      },
+      "brandAliases": {
+        "value": ["RITUXAN"],
+        "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "Highlights (title)", "quote": "RITUXAN® (rituximab) injection, for intravenous use" }
+      },
+      "hcpcs": {
+        "value": "J9312",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9312", "quote": "J9312,\"Inj., rituximab, 10 mg\",10 MG,72.094,20.000,,,,,,,," }
+      },
+      "hcpcsDescriptor": {
+        "value": "Inj., rituximab, 10 mg",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9312, column Short Description", "quote": "J9312,\"Inj., rituximab, 10 mg\",10 MG,72.094,20.000,,,,,,,," }
+      },
+      "billingUnitRaw": {
+        "value": "10 MG",
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9312, column HCPCS Code Dosage", "quote": "J9312,\"Inj., rituximab, 10 mg\",10 MG,72.094,20.000,,,,,,,," }
+      },
+      "billingUnit": {
+        "value": { "amount": 10, "unit": "MG" },
+        "cite": { "source": "cms-asp-payment-limit-oct-2026", "file": "section 508 version of October 2026 Medicare Part B Payment Limit File 091626.csv", "section": "HCPCS row J9312, column HCPCS Code Dosage", "quote": "J9312,\"Inj., rituximab, 10 mg\",10 MG,72.094,20.000,,,,,,,," }
+      },
+      "vialSizes": [
+        {
+          "value": { "amount": 100, "unit": "mg", "volumeMl": 10, "ndcs": ["50242-051-21", "50242-051-10"] },
+          "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "16 How Supplied/Storage and Handling", "quote": "One 100 mg/10 mL (10 mg/mL) single-dose vial NDC 50242-051-21 Ten 100 mg/10 mL (10 mg/mL) single-dose vials NDC 50242-051-10" }
+        },
+        {
+          "value": { "amount": 500, "unit": "mg", "volumeMl": 50, "ndcs": ["50242-053-06"] },
+          "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "16 How Supplied/Storage and Handling", "quote": "One 500 mg/50 mL (10 mg/mL) single-dose vial NDC 50242-053-06" }
+        }
+      ],
+      "singleDose": {
+        "value": true,
+        "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "16 How Supplied/Storage and Handling", "quote": "One 500 mg/50 mL (10 mg/mL) single-dose vial NDC 50242-053-06" }
+      },
+      "dosing": [
+        {
+          "id": "non_hodgkins_lymphoma",
+          "indication": {
+            "value": "Non-Hodgkin's Lymphoma (NHL)",
+            "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.2 Recommended Dose for Non-Hodgkin's Lymphoma (NHL)", "quote": "Recommended Dose for Non-Hodgkin's Lymphoma (NHL)" }
+          },
+          "dose": {
+            "value": { "amount": 375, "unit": "mg/m2" },
+            "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.2 Recommended Dose for Non-Hodgkin's Lymphoma (NHL)", "quote": "The recommended dose is 375 mg/m2 as an intravenous infusion according to the following schedules:" }
+          }
+        },
+        {
+          "id": "rheumatoid_arthritis",
+          "indication": {
+            "value": "Rheumatoid Arthritis (RA)",
+            "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.5 Recommended Dose for Rheumatoid Arthritis (RA)", "quote": "Recommended Dose for Rheumatoid Arthritis (RA)" }
+          },
+          "dose": {
+            "value": { "amount": 1000, "unit": "mg" },
+            "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.5 Recommended Dose for Rheumatoid Arthritis (RA)", "quote": "Administer RITUXAN as two-1,000 mg intravenous infusions separated by 2 weeks." }
+          },
+          "regimen": {
+            "value": "two-1,000 mg intravenous infusions separated by 2 weeks",
+            "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.5 Recommended Dose for Rheumatoid Arthritis (RA)", "quote": "Administer RITUXAN as two-1,000 mg intravenous infusions separated by 2 weeks." }
+          },
+          "courseRepeat": {
+            "value": "every 24 weeks or based on clinical evaluation, but not sooner than every 16 weeks",
+            "cite": { "source": "dailymed-rituxan", "setid": "b172773b-3905-4a1c-ad95-bab4b6126563", "section": "2.5 Recommended Dose for Rheumatoid Arthritis (RA)", "quote": "Subsequent courses should be administered every 24 weeks or based on clinical evaluation, but not sooner than every 16 weeks." }
+          }
+        }
+      ]
+    }
+  ]
+}

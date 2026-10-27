@@ -1,0 +1,2511 @@
+{
+  "metadata": {
+    "hospital": "UNIVERSITY OF MICHIGAN HEALTH",
+    "locationName": "UNIVERSITY OF MICHIGAN HEALTH",
+    "hospitalAddress": "1500 East Medical Center Drive, Ann Arbor, MI 48109",
+    "lastUpdatedOn": "3/31/2026",
+    "format": "CMS hospital price transparency standard charges CSV, wide",
+    "version": "3.0.0",
+    "sourcePageUrl": "https://www.uofmhealth.org/michigan-medicine-standard-charges",
+    "mrfUrl": "https://www.uofmhealth.org/386006309_university-of-michigan-health_standardcharges4-1-2026.zip",
+    "downloadDate": "2026-10-27",
+    "codes": [
+      "J0585",
+      "J1745",
+      "J2997",
+      "J9035",
+      "J9312"
+    ],
+    "codesNotFound": []
+  },
+  "items": [
+    {
+      "hcpcs": "J0585",
+      "description": "BOTOX 16 UNIT/8 ML (2 UNIT/ML) SYRINGE",
+      "codes": [
+        {
+          "code": "RX-40824113",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99991-0115-87",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 953.54,
+      "drugUnitOfMeasurement": "8",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 8 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "BOTOX 16 UNIT/8 ML (2 UNIT/ML) SYRINGE",
+      "codes": [
+        {
+          "code": "RX-40824113",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99991-0115-87",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 953.54,
+      "drugUnitOfMeasurement": "8",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 8 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "HC-Botox a Medical per Unit",
+      "codes": [
+        {
+          "code": "PX-025000231",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 30,
+      "drugUnitOfMeasurement": "",
+      "drugTypeOfMeasurement": "",
+      "unitBasis": "per HCPCS billing unit",
+      "unitBasisReason": "description says \"per Unit\", the CMS billing unit is 1 UNIT"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "HC-Botox a Medical per Unit",
+      "codes": [
+        {
+          "code": "PX-025000231",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 30,
+      "drugUnitOfMeasurement": "",
+      "drugTypeOfMeasurement": "",
+      "unitBasis": "per HCPCS billing unit",
+      "unitBasisReason": "description says \"per Unit\", the CMS billing unit is 1 UNIT"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "HC-Wastage-(per 1 Unit) Onabotulinumtoxin a (Botox)",
+      "codes": [
+        {
+          "code": "PX-025005392",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 30,
+      "drugUnitOfMeasurement": "",
+      "drugTypeOfMeasurement": "",
+      "unitBasis": "per HCPCS billing unit",
+      "unitBasisReason": "description says \"per 1 Unit\", the CMS billing unit is 1 UNIT"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "HC-Wastage-(per 1 Unit) Onabotulinumtoxin a (Botox)",
+      "codes": [
+        {
+          "code": "PX-025005392",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 30,
+      "drugUnitOfMeasurement": "",
+      "drugTypeOfMeasurement": "",
+      "unitBasis": "per HCPCS billing unit",
+      "unitBasisReason": "description says \"per 1 Unit\", the CMS billing unit is 1 UNIT"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "ONABOTULINUMTOXINA (BOTOX) INJECTION 100 UNIT VIAL (OR)",
+      "codes": [
+        {
+          "code": "RX-40822674",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "00023-1145-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 2929.5,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "per vial",
+      "unitBasisReason": "drug unit is 1 UN and the description names a vial"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "ONABOTULINUMTOXINA (BOTOX) INJECTION 100 UNIT VIAL (OR)",
+      "codes": [
+        {
+          "code": "RX-40822674",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "00023-1145-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 2929.5,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "per vial",
+      "unitBasisReason": "drug unit is 1 UN and the description names a vial"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "ONABOTULINUMTOXINA 100 UNIT SOLUTION FOR INJECTION",
+      "codes": [
+        {
+          "code": "RX-32700",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "00023-1145-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 2929.5,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "ONABOTULINUMTOXINA 100 UNIT SOLUTION FOR INJECTION",
+      "codes": [
+        {
+          "code": "RX-32700",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "00023-1145-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 2929.5,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J0585",
+      "description": "Pc-Wastage-(per 1 Unit)Onabotulinumtoxina (Botox)",
+      "codes": [
+        {
+          "code": "PX-J0585.1",
+          "type": "CDM"
+        },
+        {
+          "code": "J0585",
+          "type": "HCPCS"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "professional",
+      "modifiers": "",
+      "grossCharge": 30,
+      "drugUnitOfMeasurement": "",
+      "drugTypeOfMeasurement": "",
+      "unitBasis": "per HCPCS billing unit",
+      "unitBasisReason": "description says \"per 1 Unit\", the CMS billing unit is 1 UNIT"
+    },
+    {
+      "hcpcs": "J1745",
+      "description": "INFLIXIMAB 100 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-23796",
+          "type": "CDM"
+        },
+        {
+          "code": "J1745",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "57894-0030-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 4392.93,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J1745",
+      "description": "INFLIXIMAB 100 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-23796",
+          "type": "CDM"
+        },
+        {
+          "code": "J1745",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "57894-0030-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 4392.93,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 1 MG IN 1 ML INTRAVENTRICULAR INJECTION",
+      "codes": [
+        {
+          "code": "RX-40822902",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 1 MG IN 1 ML INTRAVENTRICULAR INJECTION",
+      "codes": [
+        {
+          "code": "RX-40822902",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 1 MG SYRINGE",
+      "codes": [
+        {
+          "code": "RX-40821175",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2002-88",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 404.16,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 1 MG SYRINGE",
+      "codes": [
+        {
+          "code": "RX-40821175",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2002-88",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 404.16,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 1 MG/1 ML INJECTION (DIALYSIS CATHETER)",
+      "codes": [
+        {
+          "code": "RX-40822586",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2002-88",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 404.16,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 1 MG/1 ML INJECTION (DIALYSIS CATHETER)",
+      "codes": [
+        {
+          "code": "RX-40822586",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2002-88",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 404.16,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 100 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9002",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0085-25",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 26984.15,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 100 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9002",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0085-27",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 26984.15,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 100 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9002",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0085-25",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 26984.15,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 100 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9002",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0085-27",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 26984.15,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG INTRA-CATHETER SOLUTION",
+      "codes": [
+        {
+          "code": "RX-31310",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG INTRA-CATHETER SOLUTION",
+      "codes": [
+        {
+          "code": "RX-31310",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG IV (ANES)",
+      "codes": [
+        {
+          "code": "RX-40823334",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG IV (ANES)",
+      "codes": [
+        {
+          "code": "RX-40823334",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG VIAL (OR)",
+      "codes": [
+        {
+          "code": "RX-40823067",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "per vial",
+      "unitBasisReason": "drug unit is 1 UN and the description names a vial"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG VIAL (OR)",
+      "codes": [
+        {
+          "code": "RX-40823067",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "per vial",
+      "unitBasisReason": "drug unit is 1 UN and the description names a vial"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG/1 ML INJECTION (DIALYSIS CATHETER - ALTERNATE CONC.)",
+      "codes": [
+        {
+          "code": "RX-40822539",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99991-0107-53",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 2 MG/1 ML INJECTION (DIALYSIS CATHETER - ALTERNATE CONC.)",
+      "codes": [
+        {
+          "code": "RX-40822539",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99991-0107-53",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 50 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9003",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 50 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9003",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 50 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9003",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 50 MG INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-9003",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 50 MG IV PUSH (CARDIAC ARREST ONLY)",
+      "codes": [
+        {
+          "code": "RX-40824562",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE 50 MG IV PUSH (CARDIAC ARREST ONLY)",
+      "codes": [
+        {
+          "code": "RX-40824562",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE BOLUS FOR PE",
+      "codes": [
+        {
+          "code": "RX-40829977",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE BOLUS FOR PE",
+      "codes": [
+        {
+          "code": "RX-40829977",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ACUTE STROKE PROTOCOL - BOLUS",
+      "codes": [
+        {
+          "code": "RX-40820271",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ACUTE STROKE PROTOCOL - BOLUS",
+      "codes": [
+        {
+          "code": "RX-40820271",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ACUTE STROKE PROTOCOL - INFUSION",
+      "codes": [
+        {
+          "code": "RX-40820272",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ACUTE STROKE PROTOCOL - INFUSION",
+      "codes": [
+        {
+          "code": "RX-40820272",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ANGIOJET (OR)",
+      "codes": [
+        {
+          "code": "RX-40822531",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-10",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.55,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ANGIOJET (OR)",
+      "codes": [
+        {
+          "code": "RX-40822531",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ANGIOJET (OR)",
+      "codes": [
+        {
+          "code": "RX-40822531",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-10",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.55,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE FOR ANGIOJET (OR)",
+      "codes": [
+        {
+          "code": "RX-40822531",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0041-64",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 796.61,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE INFUSION 3 MG/150 ML (SURGERY NAVIGATOR)",
+      "codes": [
+        {
+          "code": "RX-40822988",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "0UMHS-2007-05",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 734.29,
+      "drugUnitOfMeasurement": "100",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 100 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE INFUSION 3 MG/150 ML (SURGERY NAVIGATOR)",
+      "codes": [
+        {
+          "code": "RX-40822988",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "0UMHS-2007-05",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 734.29,
+      "drugUnitOfMeasurement": "100",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 100 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE INFUSION 6 MG/150 ML (SURGERY NAVIGATOR)",
+      "codes": [
+        {
+          "code": "RX-40822414",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "0UMHS-2006-82",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 1278.08,
+      "drugUnitOfMeasurement": "100",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 100 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE INFUSION 6 MG/150 ML (SURGERY NAVIGATOR)",
+      "codes": [
+        {
+          "code": "RX-40822414",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "0UMHS-2006-82",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 1278.08,
+      "drugUnitOfMeasurement": "100",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 100 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE INFUSION FOR PE",
+      "codes": [
+        {
+          "code": "RX-40820493",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE INFUSION FOR PE",
+      "codes": [
+        {
+          "code": "RX-40820493",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0044-13",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 15707.22,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "UN",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 UN; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE IR INFUSION (SURG NAVIGATOR)",
+      "codes": [
+        {
+          "code": "RX-40821995",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "0UMHS-2006-07",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 569.79,
+      "drugUnitOfMeasurement": "100",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 100 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J2997",
+      "description": "ALTEPLASE IR INFUSION (SURG NAVIGATOR)",
+      "codes": [
+        {
+          "code": "RX-40821995",
+          "type": "CDM"
+        },
+        {
+          "code": "J2997",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "0UMHS-2006-07",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 569.79,
+      "drugUnitOfMeasurement": "100",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 100 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-38022",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0060-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 3532.47,
+      "drugUnitOfMeasurement": "4",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 4 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-38022",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0061-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 12245.82,
+      "drugUnitOfMeasurement": "16",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 16 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-38022",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0060-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 3532.47,
+      "drugUnitOfMeasurement": "4",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 4 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML INTRAVENOUS SOLUTION",
+      "codes": [
+        {
+          "code": "RX-38022",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0061-01",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 12245.82,
+      "drugUnitOfMeasurement": "16",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 16 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML SUBMUCOSAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40823324",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-79",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 922.37,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML SUBMUCOSAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40823324",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-79",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 922.37,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML SUBMUCOSAL INJECTION|DISCARDED DRUG NOT ADMINISTE",
+      "codes": [
+        {
+          "code": "RX-40823324",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-79",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "JW",
+      "grossCharge": 922.37,
+      "drugUnitOfMeasurement": "1",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 1 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML TOPICAL SOLUTION",
+      "codes": [
+        {
+          "code": "RX-40823323",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-78",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 3532.47,
+      "drugUnitOfMeasurement": "4",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 4 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "BEVACIZUMAB 25 MG/ML TOPICAL SOLUTION",
+      "codes": [
+        {
+          "code": "RX-40823323",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-78",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 3532.47,
+      "drugUnitOfMeasurement": "4",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 4 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "HC-(per 10 Mg) Bevacizumab Inj",
+      "codes": [
+        {
+          "code": "PX-025000962",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 401,
+      "drugUnitOfMeasurement": "",
+      "drugTypeOfMeasurement": "",
+      "unitBasis": "per HCPCS billing unit",
+      "unitBasisReason": "description says \"per 10 Mg\", the CMS billing unit is 10 MG"
+    },
+    {
+      "hcpcs": "J9035",
+      "description": "HC-(per 10 Mg) Bevacizumab Inj",
+      "codes": [
+        {
+          "code": "PX-025000962",
+          "type": "CDM"
+        },
+        {
+          "code": "J9035",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 401,
+      "drugUnitOfMeasurement": "",
+      "drugTypeOfMeasurement": "",
+      "unitBasis": "per HCPCS billing unit",
+      "unitBasisReason": "description says \"per 10 Mg\", the CMS billing unit is 10 MG"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 0.1 MG/ML INTRADERMAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40890675",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-15",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.03",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.03 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 0.1 MG/ML INTRADERMAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40890675",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-15",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.03",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.03 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 1 MG/ML INTRADERMAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40890676",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-16",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.03",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.03 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 1 MG/ML INTRADERMAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40890676",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-16",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.03",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.03 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML CONCENTRATE,INTRAVENOUS",
+      "codes": [
+        {
+          "code": "RX-22149",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0051-21",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 4164.44,
+      "drugUnitOfMeasurement": "10",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 10 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML CONCENTRATE,INTRAVENOUS",
+      "codes": [
+        {
+          "code": "RX-22149",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0053-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 18045.89,
+      "drugUnitOfMeasurement": "50",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 50 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML CONCENTRATE,INTRAVENOUS",
+      "codes": [
+        {
+          "code": "RX-22149",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0051-21",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 4164.44,
+      "drugUnitOfMeasurement": "10",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 10 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML CONCENTRATE,INTRAVENOUS",
+      "codes": [
+        {
+          "code": "RX-22149",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0053-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 18045.89,
+      "drugUnitOfMeasurement": "50",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 50 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML FOR DESENSITIZATIONS",
+      "codes": [
+        {
+          "code": "RX-40890933",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0051-21",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 4164.44,
+      "drugUnitOfMeasurement": "10",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 10 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML FOR DESENSITIZATIONS",
+      "codes": [
+        {
+          "code": "RX-40890933",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0053-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 18045.89,
+      "drugUnitOfMeasurement": "50",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 50 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML FOR DESENSITIZATIONS",
+      "codes": [
+        {
+          "code": "RX-40890933",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0051-21",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 4164.44,
+      "drugUnitOfMeasurement": "10",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 10 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 10 MG/ML FOR DESENSITIZATIONS",
+      "codes": [
+        {
+          "code": "RX-40890933",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0053-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 18045.89,
+      "drugUnitOfMeasurement": "50",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 50 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 3 MG/ML INTRADERMAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40890677",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-17",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.03",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.03 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB 3 MG/ML INTRADERMAL INJECTION",
+      "codes": [
+        {
+          "code": "RX-40890677",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "99999-2012-17",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.03",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.03 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB SKIN PRICK",
+      "codes": [
+        {
+          "code": "RX-40890674",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0051-21",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.05",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.05 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB SKIN PRICK",
+      "codes": [
+        {
+          "code": "RX-40890674",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0053-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "inpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.05",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.05 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB SKIN PRICK",
+      "codes": [
+        {
+          "code": "RX-40890674",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0051-21",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.05",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.05 ML; the description states no basis"
+    },
+    {
+      "hcpcs": "J9312",
+      "description": "RITUXIMAB SKIN PRICK",
+      "codes": [
+        {
+          "code": "RX-40890674",
+          "type": "CDM"
+        },
+        {
+          "code": "J9312",
+          "type": "HCPCS"
+        },
+        {
+          "code": "0636",
+          "type": "RC"
+        },
+        {
+          "code": "50242-0053-06",
+          "type": "NDC"
+        }
+      ],
+      "setting": "outpatient",
+      "billingClass": "facility",
+      "modifiers": "",
+      "grossCharge": 50,
+      "drugUnitOfMeasurement": "0.05",
+      "drugTypeOfMeasurement": "ML",
+      "unitBasis": "unclear",
+      "unitBasisReason": "drug unit 0.05 ML; the description states no basis"
+    }
+  ]
+}

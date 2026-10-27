@@ -366,6 +366,51 @@ export function calculateIRAImpact(
   };
 }
 
+// ─── Best Price effect of the negotiated price ──────────────────────────────
+
+export interface IRABestPriceEffect {
+  bpBase: number;          // Best Price after the commercial deal (core result)
+  bpWithIRA: number;       // min(BP base, IRA price)
+  uraBase: number;
+  uraWithIRA: number;
+  medicaidAddOn: number;
+  addOn340B: number;
+  totalAddOn: number;
+  // Why the add-on is $0, or null when it is not
+  zeroReason: "deal_below_negotiated_price" | "negotiated_price_above_best_price" | "minimum_rebate_applies" | null;
+}
+
+/**
+ * Best Price includes the maximum fair price for a selected drug (SSA §1927(c)(1)(C)(ii)(V)), while
+ * AMP excludes negotiation program price reductions (SSA §1927(k)(1)(B)(i)(VI)). So the core AMP is
+ * unchanged and only Best Price can fall. The 340B ceiling (AMP − URA) falls by the same per-unit amount.
+ */
+export function calculateIRABestPriceEffect(
+  results: CalculationResults,
+  inputs: InputValues,
+  iraPrice: number
+): IRABestPriceEffect {
+  const { amp, standardMedicaidRebate, newBestPrice: bpBase } = results;
+  const bpWithIRA = Math.min(bpBase, iraPrice);
+  const uraBase = Math.max(standardMedicaidRebate, amp - bpBase);
+  const uraWithIRA = Math.max(standardMedicaidRebate, amp - bpWithIRA);
+  const uraIncrease = uraWithIRA - uraBase;
+  const medicaidAddOn = uraIncrease * inputs.medicaidVolume;
+  const addOn340B = uraIncrease * inputs.volume340B;
+  const totalAddOn = medicaidAddOn + addOn340B;
+
+  const zeroReason =
+    totalAddOn > 0
+      ? null
+      : iraPrice >= bpBase
+      ? results.bestPriceTriggered
+        ? "deal_below_negotiated_price"
+        : "negotiated_price_above_best_price"
+      : "minimum_rebate_applies";
+
+  return { bpBase, bpWithIRA, uraBase, uraWithIRA, medicaidAddOn, addOn340B, totalAddOn, zeroReason };
+}
+
 // ─── Channel Mix Optimizer ───────────────────────────────────────────────────
 
 export interface ChannelMixCandidate {

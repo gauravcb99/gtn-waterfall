@@ -19,6 +19,7 @@ import {
   IRAImpactInputs,
   IRAImpactResults,
   calculateIRAImpact,
+  calculateIRABestPriceEffect,
 } from "@/lib/calculations";
 
 // ─── Formatters ──────────────────────────────────────────────────────────────
@@ -173,6 +174,15 @@ export default function IRAImpactScenario({
     inputs.wac,
     results.totalNetRevenue
   );
+
+  // Best Price effect of the negotiated price, on the core AMP (the MFP is excluded from AMP)
+  const bpEffect = calculateIRABestPriceEffect(results, inputs, iraResults.iraNegotiatedPrice);
+  const pbmExcluded = inputs.concessionRecipient === "pbm_formulary";
+  const zeroReasonText = {
+    deal_below_negotiated_price: "the commercial deal already sits below the negotiated price.",
+    negotiated_price_above_best_price: "the negotiated price is above the current Best Price.",
+    minimum_rebate_applies: "the minimum rebate (23.1% of AMP) applies with or without the negotiated price.",
+  };
 
   const ceilingLabel =
     iraResults.ceilingPct === 0.75
@@ -557,6 +567,65 @@ export default function IRAImpactScenario({
                 <span className="w-3 h-3 rounded-sm bg-[#C9A86A] shrink-0" />
                 <span className="text-xs text-gray-500">Post-IRA Medicare Revenue</span>
               </div>
+            </div>
+          </div>
+
+          {/* ── Best Price effect of the negotiated price ─────────── */}
+          <div className="rounded-xl border border-gray-100 bg-white p-4 flex flex-col gap-3">
+            <div className="flex items-center gap-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#0A4747]">
+                Best Price effect of the negotiated price
+              </p>
+              <AuditIcon
+                formula="BP with IRA = min(BP base, IRA Negotiated Price); URA = max(23.1% × AMP, AMP − Best Price); Medicaid add-on = (URA with IRA − URA base) × Medicaid units; 340B add-on = (URA with IRA − URA base) × 340B units"
+                inputs={[
+                  { name: "BP base (after the commercial deal)", value: usd2.format(bpEffect.bpBase) },
+                  { name: "IRA Negotiated Price", value: usd2.format(iraResults.iraNegotiatedPrice) },
+                  { name: "Medicaid AMP (unchanged)", value: usd2.format(results.amp) },
+                  { name: "URA base", value: usd2.format(bpEffect.uraBase) },
+                  { name: "URA with IRA", value: usd2.format(bpEffect.uraWithIRA) },
+                  { name: "Medicaid units", value: inputs.medicaidVolume.toLocaleString() },
+                  { name: "340B units", value: inputs.volume340B.toLocaleString() },
+                ]}
+                citation="SSA §1927(c)(1)(C)(ii)(V) and §1927(k)(1)(B)(i)(VI) (42 USC 1396r-8)"
+              />
+            </div>
+            <table className="w-full text-sm">
+              <tbody className="divide-y divide-gray-100">
+                {([
+                  ["IRA Negotiated Price, the model's stand-in for the actual negotiated price", usd2.format(iraResults.iraNegotiatedPrice)],
+                  ["Best Price after the commercial deal (BP base)", usd2.format(bpEffect.bpBase)],
+                  ["Best Price with the negotiated price", usd2.format(bpEffect.bpWithIRA)],
+                  ["Medicaid rebate per unit (URA)", `${usd2.format(bpEffect.uraBase)} to ${usd2.format(bpEffect.uraWithIRA)}`],
+                  [`Medicaid add-on (${inputs.medicaidVolume.toLocaleString()} units)`, usd.format(bpEffect.medicaidAddOn)],
+                  [`340B add-on (${inputs.volume340B.toLocaleString()} units)`, usd.format(bpEffect.addOn340B)],
+                  ["Total add-on", usd.format(bpEffect.totalAddOn)],
+                ] as [string, string][]).map(([label, value]) => (
+                  <tr key={label}>
+                    <td className="py-2 text-gray-600">{label}</td>
+                    <td className="py-2 text-right font-semibold text-[#0A4747]">{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="text-xs text-gray-500 flex flex-col gap-1">
+              {bpEffect.zeroReason && (
+                <p className="font-semibold text-[#0A4747]">Add-on is $0: {zeroReasonText[bpEffect.zeroReason]}</p>
+              )}
+              {pbmExcluded && (
+                <p>The PBM formulary rebate does not set Best Price, but the negotiated price still can.</p>
+              )}
+              <p>
+                Medicaid AMP (from the main inputs) stays at {usd2.format(results.amp)}: price reductions under the
+                negotiation program are excluded from AMP, so only Best Price changes. The 340B ceiling (AMP − URA) falls
+                by the same amount per unit.
+              </p>
+              {parsedInputs.nonFederalAMP !== results.amp && (
+                <p>The Non-Federal AMP above sets the negotiated price ceiling; Medicaid rebates use the Medicaid AMP.</p>
+              )}
+              <p>
+                Applies only while the negotiated price is in effect, from the price applicability year ({parsedInputs.ipay}).
+              </p>
             </div>
           </div>
         </div>

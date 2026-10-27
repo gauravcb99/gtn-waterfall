@@ -124,9 +124,10 @@ function matchDescription(description: string): MatchResult {
       // The indication's last word, e.g. STROKE for "Acute Ischemic Stroke".
       extra = d.dosing.map((e) => e.indication.value.toUpperCase().split(" ").pop()!).filter((w) => tokens.includes(w));
       if (!nameTokens.some((t) => names.slice(1).includes(t)) && !extra.length) {
+        const indications = d.dosing.map((e) => e.indication.value).join(", ");
         notActivase =
-          `${names[0]} without ${names[1]} or a labeled ${brand} strength (${sizes}): can't be told apart from ` +
-          "Cathflo Activase (different product under J2997); use the NDC line type";
+          `${names[0]} without ${names[1]}, a labeled ${brand} strength (${sizes}) or a labeled indication (${indications}): ` +
+          "can't be told apart from Cathflo Activase (different product under J2997); use the NDC line type";
         continue;
       }
     }

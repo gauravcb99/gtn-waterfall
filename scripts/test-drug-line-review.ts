@@ -808,7 +808,8 @@ test("4a needs-info wording: JW/JZ when the documented vials do not cover the do
 // --- Stage 4a part C: a description-only alteplase line can be Cathflo ---
 
 const NOT_ACTIVASE =
-  "ALTEPLASE without ACTIVASE or a labeled Activase strength (50 mg, 100 mg): can't be told apart from " +
+  "ALTEPLASE without ACTIVASE, a labeled Activase strength (50 mg, 100 mg) or a labeled indication (Acute Ischemic Stroke): " +
+  "can't be told apart from " +
   "Cathflo Activase (different product under J2997); use the NDC line type";
 
 const notLabeled = (mg: string) =>
@@ -932,8 +933,17 @@ test("4d J2997 0.9 mg/kg at 50 kg, 45 units, no JW, stroke indication: still fla
   assert.equal(get("jw_jz").summary, "JW expected but not billed");
 });
 
-test("4d the same line with no indication: needs info (the accepted miss)", () => {
-  const { get, results } = strokeJ2997();
+test("4d the same line with no indication: a mg/kg dose rules out Cathflo, so it still flags JW expected", () => {
+  const { get } = strokeJ2997();
+  assert.equal(get("dose").values.doseAmount, 45);
+  assert.deepEqual(get("vials").values.vials, [50]);
+  assert.equal(get("vials").values.waste, 5);
+  assert.equal(get("jw_jz").status, "flag");
+  assert.equal(get("jw_jz").summary, "JW expected but not billed");
+});
+
+test("4d flat 45 mg dose, 45 units, no JW, no indication, no vials: needs info (the accepted miss)", () => {
+  const { get, results } = smallJ2997({ dose: { amount: 45, unit: "mg" }, unitsBilled: 45, jzReported: false, amountBilled: 4500 });
   assert.equal(get("dose").values.doseAmount, 45);
   pin(get("vials"), CATHFLO_GUARD(45));
   assert.equal(get("jw_jz").status, "needs_info");

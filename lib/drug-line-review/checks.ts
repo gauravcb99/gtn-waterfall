@@ -85,11 +85,12 @@ export function runChecks(line: ClaimLine, confirmedDrugId: string | undefined |
   const sizes = drug.vialSizes.map((v) => v.value.amount);
   const documented = !!line.vialsUsed?.length;
   // J2997 also covers Cathflo Activase (2 mg vials). With no vials documented, fewer units billed than the
-  // smallest Activase vial, and no labeled indication selected, no Activase vial is assumed.
+  // smallest Activase vial, no labeled indication selected and a flat dose (Cathflo is never dosed by
+  // weight or BSA), no Activase vial is assumed.
   const smallest = Math.min(...sizes);
   if (
     drug.id === "J2997" && !documented && totalBilled < round4(smallest / bu.amount) &&
-    !drug.dosing.some((e) => e.id === line.indicationId)
+    !drug.dosing.some((e) => e.id === line.indicationId) && line.dose.unit !== "mg/kg" && line.dose.unit !== "mg/m2"
   ) {
     const brand = drug.brandAliases.value[0];
     const why = `${units(totalBilled)} billed is less than the smallest ${brand} vial (${qty(smallest)})`;

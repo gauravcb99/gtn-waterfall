@@ -14,10 +14,10 @@ type Props = {
   claim: ClaimFormState;
   onChange: (patch: Partial<ClaimFormState>) => void;
   onFind: () => void;
-  illustrativeCharge: boolean;
+  chargeNote: string | null; // where a loaded example's amount billed comes from
 };
 
-export default function ClaimForm({ claim, onChange, onFind, illustrativeCharge }: Props) {
+export default function ClaimForm({ claim, onChange, onFind, chargeNote }: Props) {
   return (
     <section className={cardClass}>
       <CardTitle step={1}>Claim line</CardTitle>
@@ -61,8 +61,8 @@ export default function ClaimForm({ claim, onChange, onFind, illustrativeCharge 
             onChange={(e) => onChange({ jwUnitsBilled: e.target.value })} />
         </Field>
         <Field label="Amount billed ($)"
-          hint={illustrativeCharge
-            ? <span className="font-semibold text-[#C9A86A]">illustrative charge, not from a real claim</span>
+          hint={chargeNote
+            ? <span className="font-semibold text-[#C9A86A]">{chargeNote}</span>
             : "Total for the drug on this claim"}>
           <input type="number" step="any" className={inputClass} value={claim.amountBilled}
             onChange={(e) => onChange({ amountBilled: e.target.value })} />

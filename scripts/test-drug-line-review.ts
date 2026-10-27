@@ -5,7 +5,7 @@ import { EXCLUDED_PRODUCTS, matchLine } from "../lib/drug-line-review/match";
 import cmsJson from "../data/drug-line-review/cms-asp-oct-2026.json";
 import hospital from "../data/drug-line-review/hospital-charges.json";
 import { drugs } from "../lib/drug-line-review/data";
-import { EXAMPLES } from "../components/drug-line-review/examples";
+import { chargeFormula, EXAMPLES } from "../components/drug-line-review/examples";
 import { toClaimLine, type ClaimFormState, type RecordFormState } from "../components/drug-line-review/forms";
 import { summarize } from "../components/drug-line-review/display";
 import { runChecks } from "../lib/drug-line-review/checks";
@@ -620,7 +620,7 @@ test("3A amount billed blank: charge-based dollars need info; DRG still $0", () 
 
 // --- Stage 3.2: wording pinned in lib (built from the page's own examples) ---
 
-const EXAMPLE_IDS = ["J0585", "J0585", "J1745", "J2997", "J9312"];
+const EXAMPLE_IDS = ["J0585", "J0585", "J1745", "J2997", "J9312", "J0585", "J1745", "J2997", "J9035", "J9312"];
 function example(i: number, record: Partial<RecordFormState> = {}, claim: Partial<ClaimFormState> = {}) {
   const r = toClaimLine({ ...EXAMPLES[i].claim, ...claim }, { ...EXAMPLES[i].record, ...record });
   if ("error" in r) throw new Error(r.error);
@@ -955,6 +955,75 @@ test("4d the guard is J2997 only: a small J9312 line without vials still assumes
   const { get } = check(line({ hcpcs: "J9312", dose: { amount: 100, unit: "mg" }, unitsBilled: 10, amountBilled: 100 }), "J9312");
   assert.equal(get("vials").status, "pass");
   assert.equal(get("vials").values.basis, "assumed: least-waste combination");
+});
+
+// --- Stage 4b: worked examples built from real hospital descriptions ---
+
+const HOSPITAL_EXAMPLES = [
+  { i: 5, description: "HC-Botox a Medical per Unit", gross: [30], amount: "6000.00", summary: "No flags." },
+  { i: 6, description: "INFLIXIMAB 100 MG INTRAVENOUS SOLUTION", gross: [4392.93], amount: "17571.72", summary: "1 flag: JW expected but not billed." },
+  {
+    i: 7, description: "ALTEPLASE 100 MG INTRAVENOUS SOLUTION", gross: [26984.15], amount: "26984.15",
+    summary: "1 flag: 10 excess units ($0 at stake: drugs are bundled into the DRG case rate).",
+  },
+  {
+    i: 8, description: "HC-(per 10 Mg) Bevacizumab Inj", gross: [401], amount: "48120.00",
+    summary: "No flags. 1 advisory: vials of 400 + 400 + 100 + 100 + 100 mg would have wasted 50 mg instead of 150 mg.",
+  },
+  {
+    i: 9, description: "RITUXIMAB 10 MG/ML CONCENTRATE,INTRAVENOUS", gross: [18045.89, 4164.44], amount: "30539.21",
+    summary: "1 flag: 5 excess units ($898.21 at stake, illustrative).",
+  },
+];
+
+test("4b the menu has 10 examples and the first five labels are unchanged", () => {
+  assert.equal(EXAMPLES.length, 10);
+  assert.deepEqual(EXAMPLES.slice(0, 5).map((e) => e.label), [
+    "Case 1: BOTOX, 200 units billed for a 100-unit dose (rev 0250 description)",
+    "Case 2: BOTOX, 100 units + 100 JW from a 200-unit vial (rev 0636 HCPCS)",
+    "Case 3: Remicade 5 mg/kg at 80 kg, 50 units billed (NDC only)",
+    "Case 4: Activase 0.9 mg/kg at 70 kg, 63 + 37 JW (rev 0636 HCPCS)",
+    "Case 8: Rituxan 375 mg/m2 at BSA 1.8, 68 + 2 JW (rev 0636 HCPCS)",
+  ]);
+  for (const e of EXAMPLES.slice(0, 5)) assert.equal(e.hospitalCharge, undefined);
+});
+
+test("4b each hospital example uses a description and per-package charges copied from hospital-charges.json", () => {
+  for (const h of HOSPITAL_EXAMPLES) {
+    const ex = EXAMPLES[h.i];
+    assert.equal(ex.claim.lineType, "rev0250_description");
+    assert.equal(ex.claim.description, h.description);
+    const rows = hospital.items.filter((x) => x.description === h.description);
+    assert.ok(rows.length > 0, `${h.description} not in hospital-charges.json`);
+    assert.deepEqual(ex.hospitalCharge!.parts.map((p) => p.gross), h.gross);
+    for (const g of h.gross) assert.ok(rows.some((x) => x.grossCharge === g), `${h.description}: ${g} not in the file`);
+  }
+});
+
+test("4b each hospital example's amount billed equals packages × gross charge", () => {
+  for (const h of HOSPITAL_EXAMPLES) {
+    const ex = EXAMPLES[h.i];
+    assert.equal(ex.claim.amountBilled, h.amount);
+    const sum = ex.hospitalCharge!.parts.reduce((a, p) => a + p.count * p.gross, 0);
+    assert.equal(sum.toFixed(2), h.amount);
+  }
+});
+
+test("4b each hospital example's charge note shows the multiplication", () => {
+  assert.equal(chargeFormula(EXAMPLES[5].hospitalCharge!), "200 × $30.00 per billing unit = $6,000.00");
+  assert.equal(chargeFormula(EXAMPLES[6].hospitalCharge!), "4 × $4,392.93 per package = $17,571.72");
+  assert.equal(chargeFormula(EXAMPLES[9].hospitalCharge!), "1 × $18,045.89 per 50 mL package + 3 × $4,164.44 per 10 mL package = $30,539.21");
+});
+
+test("4b each hospital example matches its drug by description and gives the expected summary", () => {
+  for (const h of HOSPITAL_EXAMPLES) {
+    const m = matchLine(line({ lineType: "rev0250_description", description: h.description }));
+    assert.equal(m.status, "candidates", h.description);
+    if (m.status !== "candidates") continue;
+    assert.deepEqual(m.candidates.map((c) => c.drugId), [EXAMPLE_IDS[h.i]]);
+    const { results, line: l } = example(h.i);
+    assert.equal(summarize({ line: l, results }), h.summary);
+  }
 });
 
 if (failed) {

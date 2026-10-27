@@ -1,6 +1,9 @@
 "use client";
 
+import hospital from "@/data/drug-line-review/hospital-charges.json";
 import { displayTitle, sources } from "./sources";
+
+const h = hospital.metadata;
 
 export default function Methodology() {
   return (
@@ -20,6 +23,16 @@ export default function Methodology() {
             <div className="text-ink">Downloaded: {s.downloadDate}</div>
           </li>
         ))}
+        <li className="rounded-lg border-l-4 border-[#0A4747] bg-[#F8FAFA] p-3 text-xs flex flex-col gap-1">
+          <div className="font-semibold text-[#0A4747]">Hospital standard charges file (gross charges in the hospital examples)</div>
+          <div className="text-gray-500">{h.hospital}, {h.hospitalAddress}</div>
+          <a href={h.mrfUrl} target="_blank" rel="noopener noreferrer" className="text-[#0A4747] underline break-all">
+            {h.mrfUrl}
+          </a>
+          <div className="text-ink">Format: {h.format}, version {h.version}</div>
+          <div className="text-ink">Last updated (in the file): {h.lastUpdatedOn}</div>
+          <div className="text-ink">Downloaded: {h.downloadDate}</div>
+        </li>
       </ul>
     </details>
   );

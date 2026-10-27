@@ -7,7 +7,7 @@ import { matchLine } from "@/lib/drug-line-review/match";
 import type { ChecksOutcome, ClaimLine, MatchResult } from "@/lib/drug-line-review/types";
 import ClaimForm from "./ClaimForm";
 import { describe, summarize } from "./display";
-import { EXAMPLES } from "./examples";
+import { chargeFormula, EXAMPLES } from "./examples";
 import { EMPTY_CLAIM, EMPTY_RECORD, toClaimLine, type ClaimFormState, type RecordFormState } from "./forms";
 import MatchCard from "./MatchCard";
 import Methodology from "./Methodology";
@@ -20,7 +20,7 @@ const MATCH_FIELDS: (keyof ClaimFormState)[] = ["lineType", "description", "hcpc
 export default function DrugLineReview() {
   const [claim, setClaim] = useState<ClaimFormState>(EMPTY_CLAIM);
   const [record, setRecord] = useState<RecordFormState>(EMPTY_RECORD);
-  const [illustrativeCharge, setIllustrativeCharge] = useState(false);
+  const [chargeNote, setChargeNote] = useState<string | null>(null);
   const [match, setMatch] = useState<MatchResult | null>(null);
   const [drugId, setDrugId] = useState<string | null>(null);
   // The checks outcome together with the exact claim line it was run on (the display reads both).
@@ -31,7 +31,7 @@ export default function DrugLineReview() {
 
   function editClaim(patch: Partial<ClaimFormState>) {
     setClaim((c) => ({ ...c, ...patch }));
-    if ("amountBilled" in patch) setIllustrativeCharge(false);
+    if ("amountBilled" in patch) setChargeNote(null);
     // Changing what identifies the drug invalidates the match and the confirmation.
     if (MATCH_FIELDS.some((k) => k in patch)) {
       setMatch(null);
@@ -57,7 +57,12 @@ export default function DrugLineReview() {
     const ex = EXAMPLES[index];
     setClaim(ex.claim);
     setRecord(ex.record);
-    setIllustrativeCharge(true);
+    setChargeNote(
+      ex.hospitalCharge
+        ? "gross charge from a public hospital price file; the claim line, dose and patient are illustrative: " +
+            chargeFormula(ex.hospitalCharge)
+        : "illustrative charge, not from a real claim",
+    );
     find(ex.claim);
   }
 
@@ -103,7 +108,7 @@ export default function DrugLineReview() {
         </label>
 
         <ClaimForm claim={claim} onChange={editClaim} onFind={() => { setRecord(EMPTY_RECORD); find(claim); }}
-          illustrativeCharge={illustrativeCharge} />
+          chargeNote={chargeNote} />
 
         {match && (
           <MatchCard match={match} confirmedId={drugId} onConfirm={(id) => { setDrugId(id); setRan(null); }} />
